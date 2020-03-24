@@ -1,0 +1,2 @@
+# autonav
+flame+gms+gps
