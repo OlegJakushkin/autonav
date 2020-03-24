@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="flame" targetName="flame_test" />
+      <config projectName="flame" targetName="flame" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fd8a926c-be54-48d2-b423-9d00a3d76f5e" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ProjectId" id="1ZFqyLnXUIFFXyV1r7aYefmQz15" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Oleg\CLionProjects\test3\src\flame\pose" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Google Test.EpipolarGeometryTest.minDepthProjectionXTranslate1">
+    <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="flame" RUN_TARGET_NAME="flame_test" TEST_CLASS="EpipolarGeometryTest" TEST_METHOD="minDepthProjectionXTranslate1" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="flame" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="flame_test" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="flame" RUN_TARGET_NAME="flame_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.flame" />
+      <item itemvalue="CMake Application.flame_test" />
+      <item itemvalue="Google Test.EpipolarGeometryTest.minDepthProjectionXTranslate1" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Google Test.EpipolarGeometryTest.minDepthProjectionXTranslate1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fd8a926c-be54-48d2-b423-9d00a3d76f5e" name="Default Changelist" comment="" />
+      <created>1584445443652</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584445443652</updated>
+      <workItem from="1584445452871" duration="1967000" />
+      <workItem from="1585048204448" duration="235000" />
+      <workItem from="1585048676219" duration="5065000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="181" key="#Deployment" timestamp="1584445550397">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="181" key="#Deployment/0.0.1920.1040@0.0.1920.1040" timestamp="1584445550397" />
+    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584445793294">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584445793294" />
+    <state width="914" height="347" key="GridCell.Tab.0.bottom" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.0.center" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.0.left" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.0.right" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.1.bottom" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.1.center" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.1.left" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state width="914" height="347" key="GridCell.Tab.1.right" timestamp="1585054042964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="347" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1585054042964" />
+    <state x="463" y="165" key="SettingsEditor" timestamp="1585049871608">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="463" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1585049871608" />
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog" timestamp="1585048675767">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585048675767" />
+    <state x="667" y="154" width="586" height="732" key="find.popup" timestamp="1585051137971">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="667" y="154" width="586" height="732" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1585051137971" />
+    <state x="616" y="173" width="672" height="676" key="search.everywhere.popup" timestamp="1585049817912">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="173" width="672" height="676" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1585049817912" />
+  </component>
+</project>
