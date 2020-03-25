@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" serverName="RemoteHost">
     <serverData>
-      <paths name="Remote Host (bf201d98-af1f-4c40-94c3-a545ba48e9f0)">
+      <paths name="Remote Host (e27e1aaa-c411-4283-a45d-ec400054eca3)">
         <serverdata>
           <mappings>
             <mapping deploy="/flame" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
-            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-remote-host" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-remote-host" />
           </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="RemoteHost">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/flame" local="$PROJECT_DIR$" web="/" />
+          </mappings>
         </serverdata>
       </paths>
     </serverData>

@@ -54,3 +54,4 @@ src/utilities/common_lcmtypes/src
 cmake-build-debug
 build
 GMS-Feature-Matcher
+cmake-build-debug-remote-host

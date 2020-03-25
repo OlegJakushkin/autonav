@@ -120,7 +120,18 @@ namespace stereo {
         // draw matching
         Mat show = DrawInlier(img1, img2, kp1, kp2, matches_gms, 1);
 
-        return imwrite("./show.png", show);
+        imwrite("./matches.png", show);
+
+        //-- Localize the object
+        std::vector<Point2f> obj;
+        std::vector<Point2f> scene;
+        for( size_t i = 0; i < matches_gms.size(); i++ )
+        {
+            //-- Get the keypoints from the good matches
+            obj.push_back( kp1[ matches_gms[i].queryIdx ].pt );
+            scene.push_back( kp2[ matches_gms[i].trainIdx ].pt );
+        }
+        Mat H = findHomography( obj, scene, RANSAC );
     }
 
 /**
@@ -134,8 +145,8 @@ TEST(EpipolarGeometryTest, minDepthProjectionXTranslate1) {
 
             std::string base_dir = exe_path.parent_path().string();
 
-            Mat img1 = imread(base_dir +"/../data/RasterizationTest_DrawBottomFlatShadedTriangle.png");
-            Mat img2 = imread(base_dir +"/../data/RasterizationTest_DrawLineInterpolatedTest.png");
+            Mat img1 = imread(base_dir +"/../data/arch1.png");
+            Mat img2 = imread(base_dir +"/../data/arch2.png");
             auto res = GmsMatch(img1, img2);
             EXPECT_TRUE(res);
 }

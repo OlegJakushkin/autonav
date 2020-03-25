@@ -2,17 +2,28 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="flame" targetName="flame_test" />
       <config projectName="flame" targetName="flame" />
+      <config projectName="flame" targetName="flame_test" />
     </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Debug-Remote Host" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Remote Host" BUILD_OPTIONS="-j 40" />
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd8a926c-be54-48d2-b423-9d00a3d76f5e" name="Default Changelist" comment="" />
+    <list default="true" id="fd8a926c-be54-48d2-b423-9d00a3d76f5e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/data/arch1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/data/arch2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc" beforeDir="false" afterPath="$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <ignored path="$PROJECT_DIR$/cmake-build-debug-remote-host/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,8 +32,269 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug-Remote Host" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1173" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1211" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/filedetect/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="697">
+              <caret line="178" column="820" selection-start-line="178" selection-start-column="820" selection-end-line="178" selection-end-column="820" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/opencv_compatibility.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="325">
+              <caret line="960" column="20" selection-start-line="960" selection-start-column="8" selection-end-line="960" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/fullcalib/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="850">
+              <caret line="182" column="819" selection-start-line="182" selection-start-column="819" selection-end-line="182" selection-end-column="819" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/interactive/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="177" column="821" selection-start-line="177" selection-start-column="821" selection-end-line="177" selection-end-column="821" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/multicam/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="812">
+              <caret line="197" column="816" selection-start-line="197" selection-start-column="816" selection-end-line="197" selection-end-column="816" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/singlecalib/Makefile.am">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/interactive/Makefile.am">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="78" selection-start-line="5" selection-start-column="78" selection-end-line="5" selection-end-column="78" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/fullcalib/Makefile.am">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/fullcalib/Makefile.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="765">
+              <caret line="195" column="20" selection-start-line="195" selection-start-column="20" selection-end-line="195" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/filedetect/Makefile.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="178" column="117" selection-start-line="178" selection-start-column="117" selection-end-line="178" selection-end-column="117" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="true">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/COPYING">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="741">
+              <caret line="299" lean-forward="true" selection-start-line="299" selection-end-line="299" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/multicam/Makefile.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="765">
+              <caret line="210" column="18" selection-start-line="210" selection-start-column="18" selection-end-line="210" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/interactive/Makefile.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="177" column="118" selection-start-line="177" selection-start-column="118" selection-end-line="177" selection-end-column="118" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/filedetect/Makefile.am">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="77" selection-start-line="7" selection-start-column="77" selection-end-line="7" selection-end-column="77" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/multicam/Makefile.am">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="16" column="112" selection-start-line="16" selection-start-column="112" selection-end-line="16" selection-end-column="112" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/singlecalib/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="184" column="820" selection-start-line="184" selection-start-column="820" selection-end-line="184" selection-end-column="875" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>minDepthProjectionXTranslate1</find>
+      <find>method</find>
+      <find>CV_RODRIGUES_V2M</find>
+      <find>cvmCopy</find>
+      <find>cvProjectPointsSimple</find>
+      <find>cvProjectPoints</find>
+      <find>cvFindExtrinsicCameraParams_64d</find>
+      <find>cvFindExtrinsicCameraParams</find>
+      <find>cvCalibrateCamera</find>
+      <find>cvFindChessBoardCornerGuesses</find>
+      <find>cvFindFundamentalMatrix</find>
+      <find>cvSobel</find>
+      <find>imgproc</find>
+      <find>g++</find>
+      <find>gcc</find>
+      <find>cvRodrigues</find>
+      <find>cvRodrigues2</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/flame/test/stereo/epipolar_geometry_test.cc" />
+        <option value="$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/garfeild/opencv_compatibility.h" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/starter/geometry/projection_matrix.cpp" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/opencv_compatibility.h" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/garfeild/calib/CamAugmentation.cpp" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/garfeild/viewsets/planar_object_recognizer.cpp" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/garfeild/calib/CamCalibration.cpp" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/filedetect/Makefile" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/fullcalib/Makefile" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/interactive/Makefile" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/multicam/Makefile" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/interactive/Makefile.am" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/filedetect/Makefile.am" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/singlecalib/Makefile" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/singlecalib/Makefile.am" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/fullcalib/Makefile.am" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/fullcalib/Makefile.in" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/multicam/Makefile.in" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/multicam/Makefile.am" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/interactive/Makefile.in" />
+        <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/bazar-1.3.1/samples/filedetect/Makefile.in" />
+      </list>
+    </option>
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-12" />
+    <option name="width" value="2379" />
+    <option name="height" value="2112" />
+  </component>
   <component name="ProjectId" id="1ZFqyLnXUIFFXyV1r7aYefmQz15" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="cmake-build-debug" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="cmake-build-debug" type="462c0819:PsiDirectoryNode" />
+              <item name="CMakeFiles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="stereo" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -30,40 +302,57 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/data" />
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Натали\Documents\GitHub\autonav\test\data" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Oleg\CLionProjects\test3\src\flame\pose" />
     </key>
   </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
   <component name="RunManager" selected="Google Test.EpipolarGeometryTest.minDepthProjectionXTranslate1">
-    <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="flame" RUN_TARGET_NAME="flame_test" TEST_CLASS="EpipolarGeometryTest" TEST_METHOD="minDepthProjectionXTranslate1" TEST_MODE="SUITE_TEST">
+    <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" temporary="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame_test" CONFIG_NAME="Debug-Remote Host" RUN_TARGET_PROJECT_NAME="flame" RUN_TARGET_NAME="flame_test" TEST_CLASS="EpipolarGeometryTest" TEST_METHOD="minDepthProjectionXTranslate1" TEST_MODE="SUITE_TEST">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
         <option name="BeforeTestRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="flame" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame" CONFIG_NAME="Debug">
+    <configuration name="flame" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame" CONFIG_NAME="Debug-Remote Host">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="flame_test" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="flame" RUN_TARGET_NAME="flame_test">
+    <configuration name="flame_test" type="CMakeRunConfiguration" factoryName="Application" nameIsGenerated="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="flame" TARGET_NAME="flame_test" CONFIG_NAME="Debug-Remote Host" RUN_TARGET_PROJECT_NAME="flame" RUN_TARGET_NAME="flame_test">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <list>
+      <item itemvalue="Google Test.EpipolarGeometryTest.minDepthProjectionXTranslate1" />
       <item itemvalue="CMake Application.flame" />
       <item itemvalue="CMake Application.flame_test" />
-      <item itemvalue="Google Test.EpipolarGeometryTest.minDepthProjectionXTranslate1" />
     </list>
     <recent_temporary>
       <list>
@@ -84,8 +373,60 @@
       <workItem from="1584445452871" duration="1967000" />
       <workItem from="1585048204448" duration="235000" />
       <workItem from="1585048676219" duration="5065000" />
+      <workItem from="1585151030706" duration="525000" />
+      <workItem from="1585151581407" duration="1650000" />
+      <workItem from="1585158597124" duration="7286000" />
+      <workItem from="1585169319000" duration="4409000" />
     </task>
     <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.03.25 at 21h 13m 44s.xml">
+      <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.03.25 at 21h 17m 11s.xml">
+      <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.03.25 at 21h 21m 25s.xml">
+      <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.03.25 at 21h 22m 18s.xml">
+      <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.03.25 at 21h 37m 22s.xml">
+      <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="13870000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.105367795" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39930555" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Database Changes" order="7" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.14731099" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.20833333" />
+      <window_info anchor="bottom" id="File Transfer" order="12" weight="0.3298611" />
+      <window_info anchor="bottom" id="Messages" order="13" weight="0.328125" />
+      <window_info anchor="right" id="make" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Remote Host" order="3" visible="true" weight="0.16699801" />
+      <window_info anchor="right" id="Database" order="4" />
+    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -147,5 +488,69 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="173" width="672" height="676" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1585049817912" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc</url>
+          <line>120</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="33" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/calib3d.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="322" column="73" selection-start-line="322" selection-start-column="68" selection-end-line="322" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv/cv.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
+          <folding>
+            <element signature="e#2232#2476#0" expanded="true" />
+            <element signature="e#2613#2668#0" expanded="true" />
+            <element signature="e#2868#2900#0" expanded="true" />
+            <element signature="e#3079#3105#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="426" selection-start-line="426" selection-end-line="426" />
+          <folding>
+            <element signature="e#3195#3359#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/core/cvdef.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="348" lean-forward="true" selection-start-line="348" selection-end-line="348" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
