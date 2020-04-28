@@ -31,13 +31,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <sophus/se3.hpp>
-
 #include "gtest/gtest.h"
 
 #include "flame/stereo/epipolar_geometry.h"
 #include <boost/filesystem.hpp>
 #include "flame/pose/gms_matcher.h"
+#include "flame/flame.h"
+#include <opencv2/core/eigen.hpp>
 namespace fs = boost::filesystem;
 using namespace cv;
 
@@ -137,6 +137,130 @@ namespace stereo {
 /**
  * \brief Test minDepthProjection with translations in X direction.
  */
+
+Mat ReadCameraC(string filename = "camera_c.txt")
+{
+    int rows = 3, cols = 3;
+    double m;
+    Mat out = Mat::zeros(rows, cols, CV_64FC1);//Matrix to store values
+
+    ifstream fileStream(filename);
+    string trash;
+    for(int i = 0; i<6; ++i) {
+        fileStream >> trash;
+    }
+    int cnt = 0;//index starts from 0
+    while (fileStream >> m)
+    {
+        int temprow = cnt / cols;
+        int tempcol = cnt % cols;
+        out.at<double>(temprow, tempcol) = m;
+        cnt++;
+    }
+    return out;
+}
+
+    void RunPintsDetection(VideoCapture & capture) {
+        //ToDo, work on frames
+
+        if( !capture.isOpened() )
+        {
+            cerr <<"Could not initialize capturing from file ...\n";
+            throw runtime_error("bad input video file");
+        }
+
+        Mat frame;
+        capture >> frame;
+
+        auto size = frame.size();
+        calib.AddCamera(size.width, size.height);
+
+        int nbHomography =0;
+        for(;;)
+        {
+            // acquire image
+            Mat img1c, img2c, img1, img2;
+
+            capture >> img1c;
+            if (img1c.empty()) {
+                break;
+            }
+            cvtColor(img1c,  img1, COLOR_BGR2GRAY);
+            capture >> img2c;
+            if (img2c.empty()) {
+                break;
+            }
+            cvtColor(img2c,  img2, COLOR_BGR2GRAY);
+
+            //Detect all features
+            vector<KeyPoint> kp1, kp2;
+            Mat d1, d2;
+            vector<DMatch> matches_all, matches_gms;
+
+            Ptr<ORB> orb = ORB::create(10000);
+            orb->setFastThreshold(0);
+
+            orb->detectAndCompute(img1, Mat(), kp1, d1);
+            orb->detectAndCompute(img2, Mat(), kp2, d2);
+
+#ifdef USE_GPU
+            GpuMat gd1(d1), gd2(d2);
+	Ptr<cuda::DescriptorMatcher> matcher = cv::cuda::DescriptorMatcher::createBFMatcher(NORM_HAMMING);
+	matcher->match(gd1, gd2, matches_all);
+#else
+            BFMatcher matcher(NORM_HAMMING);
+            matcher.match(d1, d2, matches_all);
+#endif
+
+            // GMS filter
+            std::vector<bool> vbInliers;
+            gms_matcher gms(kp1, img1.size(), kp2, img2.size(), matches_all);
+            int num_inliers = gms.GetInlierMask(vbInliers, false, false);
+            cout << "Get total " << num_inliers << " matches." << endl;
+
+            // collect matches
+            for (size_t i = 0; i < vbInliers.size(); ++i)
+            {
+                if (vbInliers[i] == true)
+                {
+                    matches_gms.push_back(matches_all[i]);
+                }
+            }
+            //-- Localize the object
+            std::vector<Point2f> obj;
+            std::vector<Point2f> scene;
+            for( size_t i = 0; i < matches_gms.size(); i++ )
+            {
+                //-- Get the keypoints from the good matches
+                obj.push_back( kp1[ matches_gms[i].queryIdx ].pt );
+                scene.push_back( kp2[ matches_gms[i].trainIdx ].pt );
+            }
+
+            // Get matches that are near to point
+            flann::KDTreeIndexParams indexParams;
+            flann::Index kdtree(Mat(obj).reshape(1), indexParams);
+            vector<float> query;
+            query.push_back( size.width/4 + rand() % (size.width / 2) );
+            query.push_back( size.height/4 + rand() % (size.height / 2 ));
+            vector<int> indices;
+            vector<float> dists;
+            int pts = 9;
+
+            kdtree.knnSearch(query, indices, dists, pts);
+
+            std::vector<Point2f> obj2;
+            std::vector<Point2f> scene2;
+            for( size_t i = 0; i < pts; i++ )
+            {
+                //-- Get the keypoints from the good matches
+                obj2.push_back( obj[i] );
+                scene2.push_back( scene[i] );
+            }
+        }
+    }
+
+
+
 TEST(EpipolarGeometryTest, minDepthProjectionXTranslate1) {
             char exe_str[200];
             readlink("/proc/self/exe", exe_str, 200);
@@ -145,10 +269,41 @@ TEST(EpipolarGeometryTest, minDepthProjectionXTranslate1) {
 
             std::string base_dir = exe_path.parent_path().string();
 
-            Mat img1 = imread(base_dir +"/../data/arch1.png");
-            Mat img2 = imread(base_dir +"/../data/arch2.png");
-            auto res = GmsMatch(img1, img2);
-            EXPECT_TRUE(res);
+        VideoCapture capture("v.avi");
+        auto K = ReadCameraC("camera_c.txt");
+
+
+        if( !capture.isOpened() )
+        {
+            throw runtime_error("Could not initialize capturing from file");
+        }
+        Mat frame;
+        capture >> frame;
+        Mat Kinv = K.inv();
+        Matrix3f Ke, Keinv;
+        cv2eigen(K, Ke);
+        cv2eigen(Kinv, Keinv);
+        flame::Flame f( frame.size().width,
+                        frame.size().height,
+                        Ke,
+                        Keinv );
+        auto time = 0;
+        // Detect and track Points
+        // Reconstruct pos/rot https://docs.opencv.org/3.4/da/db5/group__reconstruction.html#gaadb8cc60069485cbb9273b1efebd757d
+
+        //cv::Mat3b rgb;
+        //cv::Mat1f depth;
+
+        Eigen::Vector3f t;
+        Eigen::Quaternionf q;
+        // Todo - fill t and q
+        // Use https://gist.github.com/shubh-agrawal/76754b9bfb0f4143819dbd146d15d4c8
+
+        Sophus::SE3f T_new(q, t);
+
+        // Feed to Flame
+        f.update(time, time,,, T_new)
+            EXPECT_TRUE(true);
 }
 
 /**
