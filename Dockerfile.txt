@@ -18,20 +18,26 @@ run apt-get update --fix-missing && apt-get upgrade -y
 run apt-get install -y gdb rsync
 #end install SSH
 
-#install opencv 3.2
-run apt-get install -y libboost-all-dev git
+#install opencv 3.4
+run apt-get update && apt-get install -y libboost-all-dev git libeigen3-dev libgflags-dev libgoogle-glog-dev libatlas-base-dev libsuitesparse-dev
+run add-apt-repository -y ppa:bzindovic/suitesparse-bugfix-1319687 && apt-get update && apt-get install -y libsuitesparse-dev
+run git clone https://ceres-solver.googlesource.com/ceres-solver && \
+    cd ceres-solver && \
+    mkdir build && cd build && \
+    cmake .. && \
+    make -j $(nproc) && \
+    make install
+
 run \
-    wget https://github.com/Itseez/opencv/archive/3.2.0.zip && \
-    unzip 3.2.0.zip && \
-    mv opencv-3.2.0/ opencv/ && \
-    rm -rf 3.2.0.zip && \
-
+    wget https://github.com/Itseez/opencv/archive/3.4.10.zip && \
+    unzip 3.4.10.zip && \
+    mv opencv-3.4.10/ opencv/ && \
+    rm -rf 3.4.10.zip && \
     cd / && \
-    wget https://github.com/opencv/opencv_contrib/archive/3.2.0.zip -O 3.2.0-contrib.zip && \
-    unzip 3.2.0-contrib.zip && \
-    mv opencv_contrib-3.2.0 opencv_contrib && \
-    rm -rf 3.2.0-contrib.zip && \
-
+    wget https://github.com/opencv/opencv_contrib/archive/3.4.10.zip -O 3.4.10-contrib.zip && \
+    unzip 3.4.10-contrib.zip && \
+    mv opencv_contrib-3.4.10 opencv_contrib && \
+    rm -rf 3.4.10-contrib.zip && \
     cd opencv && \
     mkdir build && \
     cd build && \
@@ -39,6 +45,7 @@ run \
         -D CMAKE_INSTALL_PREFIX=/usr/ \
         -D INSTALL_C_EXAMPLES=OFF \
         -D INSTALL_PYTHON_EXAMPLES=OFF \
+        -D CPU_DISPATCH=SSE4_2,AVX
         -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules \
         -D BUILD_EXAMPLES=OFF .. && \
     make -j $(nproc) && \

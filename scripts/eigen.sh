@@ -23,7 +23,7 @@ mkdir -p ${2}/lib/pkgconfig
 rm -rf ${1}/eigen
 hg clone https://bitbucket.org/eigen/eigen ${1}/eigen
 cd ${1}/eigen
-hg checkout 3.2.10
+hg checkout 3.3.7
 
 mkdir build
 cd build
