@@ -26,6 +26,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <memory>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -38,12 +39,18 @@
 #include "flame/pose/gms_matcher.h"
 #include "flame/flame.h"
 #include <opencv2/core/eigen.hpp>
-//TodO add sfm
-//#include <opencv2/sfm.hpp>
-//#include <opencv2/sfm/reconstruct.hpp>
+
+//Required for sfm to work
+#define CERES_FOUND 1
+#include <opencv2/sfm.hpp>
+#include <opencv2/sfm/reconstruct.hpp>
+
 #include <sophus/se3.hpp>
+
 namespace fs = boost::filesystem;
+using namespace std;
 using namespace cv;
+using namespace cv::sfm;
 
 namespace flame {
 
@@ -160,6 +167,39 @@ namespace flame {
             return out;
         }
 
+        Eigen::Quaternionf GetQuaternion(Mat R)
+        {
+            vector<float> result(4, 0);
+            double trace = R.at<double>(0,0) + R.at<double>(1,1) + R.at<double>(2,2);
+
+            if (trace > 0.0)
+            {
+                double s = sqrt(trace + 1.0);
+                result[3] = (s * 0.5);
+                s = 0.5 / s;
+                result[0] = ((R.at<double>(2,1) - R.at<double>(1,2)) * s);
+                result[1] = ((R.at<double>(0,2) - R.at<double>(2,0)) * s);
+                result[2] = ((R.at<double>(1,0) - R.at<double>(0,1)) * s);
+            }
+
+            else
+            {
+                int i = R.at<double>(0,0) < R.at<double>(1,1) ? (R.at<double>(1,1) < R.at<double>(2,2) ? 2 : 1) : (R.at<double>(0,0) < R.at<double>(2,2) ? 2 : 0);
+                int j = (i + 1) % 3;
+                int k = (i + 2) % 3;
+
+                double s = sqrt(R.at<double>(i, i) - R.at<double>(j,j) - R.at<double>(k,k) + 1.0);
+                result[i] = s * 0.5;
+                s = 0.5 / s;
+
+                result[3] = (R.at<double>(k,j) - R.at<double>(j,k)) * s;
+                result[j] = (R.at<double>(j,i) + R.at<double>(i,j)) * s;
+                result[k] = (R.at<double>(k,i) + R.at<double>(i,k)) * s;
+            }
+            Eigen::Quaternionf qresult(result[0], result[1], result[2], result[3]);
+            return qresult;
+        }
+
         struct FrameDescriptor {
             Mat1b frame;
 #ifdef USE_GPU
@@ -172,20 +212,27 @@ namespace flame {
         };
 
 
-        FrameDescriptor GetDescriptor(Mat1b & frame, FrameDescriptor & inOut) {
-            FrameDescriptor out;
+        shared_ptr<FrameDescriptor> GetDescriptor(Mat1b & frame, shared_ptr<FrameDescriptor> inOut) {
+            //TODO work on arrays of ptrs not single image pairs!
+            auto out = make_shared<FrameDescriptor >();
             if (frame.empty()) {
                 return out;
             }
 
             vector<DMatch> matches_all, matches_gms;
 
-            Ptr<ORB> orb = ORB::create(10000);
-            orb->setFastThreshold(0);
-            orb->detectAndCompute(frame, Mat(), out.points, out.descriptors);
+            Ptr<ORB> orb = ORB::create(500);
+            //orb->setFastThreshold(0);
+            Mat descriptors_tmp;
+            orb->detectAndCompute(frame, Mat(), out->points, descriptors_tmp);
 
-            auto firstFrame = inOut.frame.empty();
-            out.frame = frame;
+            std::vector<Mat> vec;
+            for (int i=0; i< descriptors_tmp.rows; i++)
+            {
+                out->descriptors.push_back(descriptors_tmp.row(i));
+            }
+            auto firstFrame = inOut->frame.empty();
+            out->frame = frame.clone();
             if(firstFrame ) {
                 return out;
             }
@@ -196,13 +243,16 @@ namespace flame {
 	matcher->match(in.descriptors, out.descriptors, matches_all);
 #else
             static BFMatcher matcher(NORM_HAMMING);
-            matcher.match(inOut.descriptors, out.descriptors, matches_all);
+            Mat a, b;
+            vconcat(inOut->descriptors, a);
+            vconcat(out->descriptors, b);
+            matcher.match(a, b, matches_all);
 #endif
 
             // GMS filter
             std::vector<bool> vbInliers;
             auto size = frame.size();
-            gms_matcher gms(inOut.points, size, out.points, size, matches_all);
+            gms_matcher gms(inOut->points, size, out->points, size, matches_all);
             int num_inliers = gms.GetInlierMask(vbInliers, false, false);
             cout << "Get total " << num_inliers << " matches." << endl;
 
@@ -224,22 +274,23 @@ namespace flame {
 
             for( size_t i = 0; i < matches_gms.size(); i++ )
             {
-                inGoodPoints.push_back(inOut.points[ matches_gms[i].queryIdx]);
-                inGoodDescriptors.push_back(inOut.descriptors[ matches_gms[i].queryIdx]);
+                inGoodPoints.push_back(inOut->points[ matches_gms[i].queryIdx]);
+                inGoodDescriptors.push_back(inOut->descriptors[ matches_gms[i].queryIdx]);
 
-                outGoodPoints.push_back(out.points[ matches_gms[i].trainIdx ]);
-                outGoodDescriptors.push_back(out.descriptors[ matches_gms[i].trainIdx ]);
+                outGoodPoints.push_back(out->points[ matches_gms[i].trainIdx ]);
+                outGoodDescriptors.push_back(out->descriptors[ matches_gms[i].trainIdx ]);
             }
-            out.points = outGoodPoints;
-            out.descriptors = outGoodDescriptors;
+            out->points = outGoodPoints;
+            out->descriptors = outGoodDescriptors;
 
-            inOut.points = inGoodPoints;
-            inOut.descriptors = inGoodDescriptors;
+            inOut->points = inGoodPoints;
+            inOut->descriptors = inGoodDescriptors;
             return out;
         }
 
 
-        vector< vector<Point2f> >  RestriktPointsKnn(Size size, std::vector<std::vector<Point2f> > frames, int pointsCount=9){
+        vector< vector<Point2f> >  RestrictPointsKnn(Size size, std::vector<std::vector<Point2f> > frames,
+                                                     int pointsCount = 9){
             // Get matches that are near to point
             auto & obj = frames[0];
             flann::KDTreeIndexParams indexParams;
@@ -258,22 +309,26 @@ namespace flame {
             for( size_t i = 0; i < pointsCount; i++ ) {
                 for(size_t j = 0; j < fsize; j++) {
                     result[j].push_back(frames[j][i]);
+                    cout << frames[j][i] << endl;
                 }
+                cout << "---" << endl;
+
             }
             return result;
         }
 
-        vector< vector<Point2f> >  GetPointTracks( vector<FrameDescriptor> & frames){
+        vector< vector<Point2f> >  GetPointTracks( vector<shared_ptr<FrameDescriptor> > & frames){
             auto fsize = frames.size();
-            auto psize = frames[0].points.size();
+            auto psize = frames[0]->points.size();
             vector< vector<Point2f> > fromFrames(fsize);
             for( size_t i = 0; i < fsize; i++ ) {
                 for(size_t j = 0; j < psize; j++) {
-                    fromFrames[i].push_back(frames[i].points[j].pt);
+                    fromFrames[i].push_back(frames[i]->points[j].pt);
                 }
             }
-            auto frameSize = frames[0].frame.size();
-            auto result = RestriktPointsKnn(frameSize, fromFrames);
+            auto frameSize = frames[0]->frame.size();
+            auto result = RestrictPointsKnn(frameSize, fromFrames);
+            return fromFrames;
         }
 
         struct MoveDescriptor {
@@ -283,14 +338,19 @@ namespace flame {
                     Transition(0,0,0),
                     Rotation(0,0,0,0)
             {}
+            MoveDescriptor(vector<shared_ptr<FrameDescriptor> > fd , Mat &K){
 
-            MoveDescriptor(FrameDescriptor from, FrameDescriptor to){
-                vector<FrameDescriptor > fd = {from, to};
+            //MoveDescriptor(FrameDescriptor &from, FrameDescriptor &to, Mat &K){
+                //vector<FrameDescriptor* > fd = {&from, &to};
                 auto tracks = GetPointTracks(fd);
-                //ToDo: cv::sfm::reconstruct();
-                // Todo - fill t and q
-                // Use https://gist.github.com/shubh-agrawal/76754b9bfb0f4143819dbd146d15d4c8
 
+                bool is_projective = false;
+                vector<Mat> Rs_est, ts_est, points3d_estimated;
+                reconstruct(tracks, Rs_est, ts_est, K, points3d_estimated, is_projective);
+                auto t = ts_est[1];
+                Transition = Eigen::Vector3f(t.at<float>(0),t.at<float>(1),t.at<float>(2));
+
+                Rotation = GetQuaternion(Rs_est[1]);
             }
 
             Sophus::SE3f GetPose() {
@@ -309,14 +369,15 @@ namespace flame {
 
             std::string base_dir = exe_path.parent_path().string();
 
-            VideoCapture capture("v.avi");
-            auto K = ReadCameraC("camera_c.txt");
+            VideoCapture capture("/flame/v.avi");
+            auto K = ReadCameraC("/flame/camera_c.txt");
 
 
             if( !capture.isOpened() )
             {
                 throw runtime_error("Could not initialize capturing from file");
             }
+
             cv::Mat3b frame;
             capture >> frame;
             Mat Kinv = K.inv();
@@ -329,8 +390,8 @@ namespace flame {
                             Ke,
                             Keinv );
 
-            VideoWriter videoOutWireframe("out_wires.avi",CV_FOURCC('F','M','P','4'),10, fsize);
-            VideoWriter videoOutDepth("out_depth.avi",CV_FOURCC('F','M','P','4'),10, fsize);
+            VideoWriter videoOutWireframe("/flame/out_wires.avi",CV_FOURCC('F','M','P','4'),10, fsize);
+            VideoWriter videoOutDepth("/flame/out_depth.avi",CV_FOURCC('F','M','P','4'),10, fsize);
 
             auto time = 0;
 
@@ -339,20 +400,34 @@ namespace flame {
 
             cv::Mat1b bw_frame;
             cv::cvtColor(frame, bw_frame, CV_BGR2GRAY);
-            FrameDescriptor lastFrame;
+            vector<shared_ptr<FrameDescriptor> > fds;
+            auto lastFrame = make_shared<FrameDescriptor>();
+            auto currentFrame = make_shared<FrameDescriptor>();
             lastFrame = GetDescriptor(bw_frame, lastFrame);
-
+            fds.push_back(lastFrame);
             for(;;) {
                 cv::Mat1b bw_newframe;
-                cv::cvtColor(frame, bw_newframe, CV_BGR2GRAY);
-                auto currentFrame = GetDescriptor(bw_newframe, lastFrame);
-                capture >> frame;
-                if(frame.empty()){
-                    break;
+
+                for(int i = 0; i < 30; i++) {
+                    cout << "+" << endl;
+                    capture >> frame;
+                    if (frame.empty()) {
+                        break;
+                    }
+                    cv::cvtColor(frame, bw_newframe, CV_BGR2GRAY);
+                    currentFrame = GetDescriptor(bw_newframe, fds[i]);
+                    fds.push_back(currentFrame);
                 }
 
-                MoveDescriptor md(lastFrame, currentFrame);
+                cout << "2" << endl;
+
+                MoveDescriptor md(fds, K);
+                cout << "3" << endl;
+
                 cv::Mat1f depth;
+                cout << "pos: " << md.Transition << endl
+                     << "rot: " << md.Rotation.vec() << endl;
+
                 Sophus::SE3f T_new = md.GetPose();
 
                 // Feed to Flame
@@ -361,7 +436,18 @@ namespace flame {
                 auto idm = f.getDebugImageInverseDepthMap();
                 videoOutWireframe.write(wf);
                 videoOutDepth.write(idm);
+                lastFrame = currentFrame;
+                cout << "frame " << ++time << endl;
+                if(lastFrame->points.size()<100) {
+                    auto empty = make_shared<FrameDescriptor>();
+                    lastFrame = GetDescriptor(bw_newframe, empty);
+                    cout << "regenerating points" << endl;
+                }
+                fds.clear();
+                fds.push_back(lastFrame);
+
             }
+
             videoOutWireframe.release();
             videoOutDepth.release();
 
