@@ -60,95 +60,6 @@ namespace flame {
 
     namespace stereo {
 
-        Mat DrawInlier(Mat &src1, Mat &src2, vector<KeyPoint> &kpt1, vector<KeyPoint> &kpt2, vector<DMatch> &inlier, int type) {
-            const int height = max(src1.rows, src2.rows);
-            const int width = src1.cols + src2.cols;
-            Mat output(height, width, CV_8UC3, Scalar(0, 0, 0));
-            src1.copyTo(output(Rect(0, 0, src1.cols, src1.rows)));
-            src2.copyTo(output(Rect(src1.cols, 0, src2.cols, src2.rows)));
-
-            if (type == 1)
-            {
-                for (size_t i = 0; i < inlier.size(); i++)
-                {
-                    Point2f left = kpt1[inlier[i].queryIdx].pt;
-                    Point2f right = (kpt2[inlier[i].trainIdx].pt + Point2f((float)src1.cols, 0.f));
-                    line(output, left, right, Scalar(0, 255, 255));
-                }
-            }
-            else if (type == 2)
-            {
-                for (size_t i = 0; i < inlier.size(); i++)
-                {
-                    Point2f left = kpt1[inlier[i].queryIdx].pt;
-                    Point2f right = (kpt2[inlier[i].trainIdx].pt + Point2f((float)src1.cols, 0.f));
-                    line(output, left, right, Scalar(255, 0, 0));
-                }
-
-                for (size_t i = 0; i < inlier.size(); i++)
-                {
-                    Point2f left = kpt1[inlier[i].queryIdx].pt;
-                    Point2f right = (kpt2[inlier[i].trainIdx].pt + Point2f((float)src1.cols, 0.f));
-                    circle(output, left, 1, Scalar(0, 255, 255), 2);
-                    circle(output, right, 1, Scalar(0, 255, 0), 2);
-                }
-            }
-
-            return output;
-        }
-
-        bool GmsMatch(Mat &img1, Mat &img2) {
-            vector<KeyPoint> kp1, kp2;
-            Mat d1, d2;
-            vector<DMatch> matches_all, matches_gms;
-
-            Ptr<ORB> orb = ORB::create(10000);
-            orb->setFastThreshold(0);
-
-            orb->detectAndCompute(img1, Mat(), kp1, d1);
-            orb->detectAndCompute(img2, Mat(), kp2, d2);
-
-#ifdef USE_GPU
-            GpuMat gd1(d1), gd2(d2);
-	Ptr<cuda::DescriptorMatcher> matcher = cv::cuda::DescriptorMatcher::createBFMatcher(NORM_HAMMING);
-	matcher->match(gd1, gd2, matches_all);
-#else
-            BFMatcher matcher(NORM_HAMMING);
-            matcher.match(d1, d2, matches_all);
-#endif
-
-            // GMS filter
-            vector<bool> vbInliers;
-            gms_matcher gms(kp1, img1.size(), kp2, img2.size(), matches_all);
-            int num_inliers = gms.GetInlierMask(vbInliers, false, false);
-            cout << "Get total " << num_inliers << " matches." << endl;
-
-            // collect matches
-            for (size_t i = 0; i < vbInliers.size(); ++i)
-            {
-                if (vbInliers[i] == true)
-                {
-                    matches_gms.push_back(matches_all[i]);
-                }
-            }
-
-            // draw matching
-            Mat show = DrawInlier(img1, img2, kp1, kp2, matches_gms, 1);
-
-            imwrite("./matches.png", show);
-
-            //-- Localize the object
-            vector<Point2f> obj;
-            vector<Point2f> scene;
-            for( size_t i = 0; i < matches_gms.size(); i++ )
-            {
-                //-- Get the keypoints from the good matches
-                obj.push_back( kp1[ matches_gms[i].queryIdx ].pt );
-                scene.push_back( kp2[ matches_gms[i].trainIdx ].pt );
-            }
-            Mat H = findHomography( obj, scene, RANSAC );
-        }
-
         Mat ReadCameraC(string filename = "camera_c.txt")
         {
             int rows = 3, cols = 3;
@@ -205,19 +116,26 @@ namespace flame {
         }
 
         struct FrameDescriptor {
+
             Mat1b frame;
 #ifdef USE_GPU
-            vector<GpuMat> descriptors;
+            GpuMat descriptors;
 #else
-            vector<Mat> descriptors;
+            Mat descriptors;
 #endif
-            vector<KeyPoint> points;
+            vector<KeyPoint> rawPoints;
 
+            vector<KeyPoint> gmsPoints;
+
+            void BakePointsOnFrame() {
+                pointsOnFrame = vector<Point2f>();
+                for(auto & pt : gmsPoints) {
+                    pointsOnFrame.push_back(pt.pt);
+                }
+            }
 
             vector<Point2f> & GetPointsOnFrame() {
-                BakePointsOnFrame();
                 return pointsOnFrame;
-
             }
 
             void SetPointsOnFrame(vector<Point2f> & otherPts) {
@@ -226,11 +144,6 @@ namespace flame {
 
         private:
             vector<Point2f> pointsOnFrame;
-            void BakePointsOnFrame() {
-                for(auto & pt : points) {
-                    pointsOnFrame.push_back(pt.pt);
-                }
-            }
         };
 
         //We track features along all inOut frames and keep only ones that are persistent
@@ -245,13 +158,8 @@ namespace flame {
             Ptr<ORB> orb = ORB::create(500);
             //orb->setFastThreshold(0);
             Mat descriptors_tmp;
-            orb->detectAndCompute(frame, Mat(), out->points, descriptors_tmp);
+            orb->detectAndCompute(frame, Mat(), out->rawPoints, out->descriptors);
 
-            vector<Mat> vec;
-            for (int i=0; i< descriptors_tmp.rows; i++)
-            {
-                out->descriptors.push_back(descriptors_tmp.row(i));
-            }
             auto firstFrame = (in == nullptr);
             out->frame = frame.clone();
             if(firstFrame) {
@@ -261,19 +169,16 @@ namespace flame {
 #ifdef USE_GPU
 
             static Ptr<cuda::DescriptorMatcher> matcher = cv::cuda::DescriptorMatcher::createBFMatcher(NORM_HAMMING);
-	matcher->match(in.descriptors, out.descriptors, matches_all);
+	matcher->match(in->descriptors, out->descriptors, matches_all);
 #else
             static BFMatcher matcher(NORM_HAMMING);
-            Mat a, b;
-            vconcat(in->descriptors, a);
-            vconcat(out->descriptors, b);
-            matcher.match(a, b, matches_all);
+            matcher.match(in->descriptors, out->descriptors, matches_all);
 #endif
 
             // GMS filter
             vector<bool> vbInliers;
             auto size = frame.size();
-            gms_matcher gms(in->points, size, out->points, size, matches_all);
+            gms_matcher gms(in->rawPoints, size, out->rawPoints, size, matches_all);
             int num_inliers = gms.GetInlierMask(vbInliers, false, false);
             cout << "Get total " << num_inliers << " matches." << endl;
 
@@ -287,23 +192,15 @@ namespace flame {
             }
             //-- Localize the object
             vector<KeyPoint> outGoodPoints;
-            vector<Mat> outGoodDescriptors;
-
             vector<KeyPoint> inGoodPoints;
-             vector<Mat>inGoodDescriptors;
 
             for( size_t i = 0; i < matches_gms.size(); i++ )
             {
-                inGoodPoints.push_back(in->points[matches_gms[i].queryIdx]);
-                inGoodDescriptors.push_back(in->descriptors[matches_gms[i].queryIdx]);
-
-                outGoodPoints.push_back(out->points[ matches_gms[i].trainIdx ]);
-                outGoodDescriptors.push_back(out->descriptors[ matches_gms[i].trainIdx ]);
+                inGoodPoints.push_back(in->rawPoints[matches_gms[i].queryIdx]);
+                outGoodPoints.push_back(out->rawPoints[ matches_gms[i].trainIdx ]);
             }
-            out->points = outGoodPoints;
-            out->descriptors = outGoodDescriptors;
-            in->points = inGoodPoints;
-            in->descriptors = inGoodDescriptors;
+            out->gmsPoints = outGoodPoints;
+            in->gmsPoints = inGoodPoints;
 
             return out;
         }
@@ -337,17 +234,16 @@ namespace flame {
         struct MoveDescriptor {
             Eigen::Vector3f Transition;
             Eigen::Quaternionf Rotation;
-            MoveDescriptor():
-                    Transition(0,0,0),
-                    Rotation(0,0,0,0)
-            {}
             MoveDescriptor(shared_ptr<FrameDescriptor> from, shared_ptr<FrameDescriptor> to,  Mat &K){
-                RestrictPointsKnn(from->frame.size(), from, to, 9);
+                from->BakePointsOnFrame();
+                to->BakePointsOnFrame();
+                //RestrictPointsKnn(from->frame.size(), from, to, 9);
                 auto & inPts = from->GetPointsOnFrame();
                 auto & outPts = to->GetPointsOnFrame();
-                
                 cout << "m1" << endl;
-                auto F = findFundamentalMat(inPts, outPts, CV_FM_8POINT);
+                cout << inPts.size() << " " << outPts.size() << endl;
+
+                auto F = findFundamentalMat(inPts, outPts, CV_FM_LMEDS );
 
                 cout << "m2" << endl;
                 Mat E;
@@ -426,23 +322,32 @@ namespace flame {
 
                 cv::cvtColor(frame, bw_newframe, CV_BGR2GRAY);
                 currentFrame = GetDescriptor(bw_newframe, lastFrame);
+                imwrite("/flame/current.png", currentFrame->frame);
                 cout << "2" << endl;
 
                 MoveDescriptor md(lastFrame, currentFrame, K);
                 cout << "3" << endl;
 
-                cv::Mat1f depth;
+                Sophus::SE3f T_new = md.GetPose();
+                auto t_end = chrono::high_resolution_clock::now();
+
                 cout << "pos: " << md.Transition << endl
                      << "rot: " << md.Rotation.vec() << endl;
 
-                Sophus::SE3f T_new = md.GetPose();
-                auto t_end = chrono::high_resolution_clock::now();
                 cout << "getting pos/rot ready took: " <<  chrono::duration<double, milli>(t_end-t_start).count() << " milliseconds" << endl;
                 // Feed to Flame
+                cv::Mat1f depth;
+                try {
                 f.update(time, time, T_new, bw_newframe, true, depth);
+                } catch (exception & e) {
+                    cout << "Error: " << e.what() << endl;
+                }
 
                 auto wf = f.getDebugImageWireframe();
                 auto idm = f.getDebugImageInverseDepthMap();
+                imwrite("/flame/wf.png", wf);
+                imwrite("/flame/idm.png", wf);
+                imwrite("/flame/last.png", lastFrame->frame);
                 videoOutWireframe.write(wf);
                 videoOutDepth.write(idm);
 
