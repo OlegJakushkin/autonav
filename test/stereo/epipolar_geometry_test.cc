@@ -19,6 +19,8 @@
  * @author W. Nicholas Greene
  * @date 2017-08-18 19:18:41 (Fri)
  */
+//Required for sfm to work
+#define CERES_FOUND 1
 
 #include <unistd.h>
 
@@ -27,25 +29,27 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <chrono>
+
+#include <boost/filesystem.hpp>
+#include <sophus/se3.hpp>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "gtest/gtest.h"
-
-#include "flame/stereo/epipolar_geometry.h"
-#include <boost/filesystem.hpp>
-#include "flame/pose/gms_matcher.h"
-#include "flame/flame.h"
-#include <opencv2/core/eigen.hpp>
-
-//Required for sfm to work
-#define CERES_FOUND 1
+#include <opencv2/calib3d.hpp>
 #include <opencv2/sfm.hpp>
 #include <opencv2/sfm/reconstruct.hpp>
+#include <opencv2/sfm/fundamental.hpp>
 
-#include <sophus/se3.hpp>
+#include <opencv2/core/eigen.hpp>
+
+#include "flame/stereo/epipolar_geometry.h"
+#include "flame/pose/gms_matcher.h"
+#include "flame/flame.h"
+
+#include "gtest/gtest.h"
 
 namespace fs = boost::filesystem;
 using namespace std;
@@ -114,7 +118,7 @@ namespace flame {
 #endif
 
             // GMS filter
-            std::vector<bool> vbInliers;
+            vector<bool> vbInliers;
             gms_matcher gms(kp1, img1.size(), kp2, img2.size(), matches_all);
             int num_inliers = gms.GetInlierMask(vbInliers, false, false);
             cout << "Get total " << num_inliers << " matches." << endl;
@@ -134,8 +138,8 @@ namespace flame {
             imwrite("./matches.png", show);
 
             //-- Localize the object
-            std::vector<Point2f> obj;
-            std::vector<Point2f> scene;
+            vector<Point2f> obj;
+            vector<Point2f> scene;
             for( size_t i = 0; i < matches_gms.size(); i++ )
             {
                 //-- Get the keypoints from the good matches
@@ -207,17 +211,34 @@ namespace flame {
 #else
             vector<Mat> descriptors;
 #endif
-
             vector<KeyPoint> points;
+
+
+            vector<Point2f> & GetPointsOnFrame() {
+                BakePointsOnFrame();
+                return pointsOnFrame;
+
+            }
+
+            void SetPointsOnFrame(vector<Point2f> & otherPts) {
+                pointsOnFrame = otherPts;
+            }
+
+        private:
+            vector<Point2f> pointsOnFrame;
+            void BakePointsOnFrame() {
+                for(auto & pt : points) {
+                    pointsOnFrame.push_back(pt.pt);
+                }
+            }
         };
 
-
-        shared_ptr<FrameDescriptor> GetDescriptor(Mat1b & frame, shared_ptr<FrameDescriptor> inOut) {
-            //TODO work on arrays of ptrs not single image pairs!
-            auto out = make_shared<FrameDescriptor >();
+        //We track features along all inOut frames and keep only ones that are persistent
+        shared_ptr<FrameDescriptor> GetDescriptor(Mat1b & frame, shared_ptr<FrameDescriptor>  in = nullptr) {
             if (frame.empty()) {
-                return out;
+                return nullptr;
             }
+            auto out = make_shared<FrameDescriptor>();
 
             vector<DMatch> matches_all, matches_gms;
 
@@ -226,14 +247,14 @@ namespace flame {
             Mat descriptors_tmp;
             orb->detectAndCompute(frame, Mat(), out->points, descriptors_tmp);
 
-            std::vector<Mat> vec;
+            vector<Mat> vec;
             for (int i=0; i< descriptors_tmp.rows; i++)
             {
                 out->descriptors.push_back(descriptors_tmp.row(i));
             }
-            auto firstFrame = inOut->frame.empty();
+            auto firstFrame = (in == nullptr);
             out->frame = frame.clone();
-            if(firstFrame ) {
+            if(firstFrame) {
                 return out;
             }
 
@@ -244,15 +265,15 @@ namespace flame {
 #else
             static BFMatcher matcher(NORM_HAMMING);
             Mat a, b;
-            vconcat(inOut->descriptors, a);
+            vconcat(in->descriptors, a);
             vconcat(out->descriptors, b);
             matcher.match(a, b, matches_all);
 #endif
 
             // GMS filter
-            std::vector<bool> vbInliers;
+            vector<bool> vbInliers;
             auto size = frame.size();
-            gms_matcher gms(inOut->points, size, out->points, size, matches_all);
+            gms_matcher gms(in->points, size, out->points, size, matches_all);
             int num_inliers = gms.GetInlierMask(vbInliers, false, false);
             cout << "Get total " << num_inliers << " matches." << endl;
 
@@ -269,66 +290,48 @@ namespace flame {
             vector<Mat> outGoodDescriptors;
 
             vector<KeyPoint> inGoodPoints;
-            vector<Mat> inGoodDescriptors;
-
+             vector<Mat>inGoodDescriptors;
 
             for( size_t i = 0; i < matches_gms.size(); i++ )
             {
-                inGoodPoints.push_back(inOut->points[ matches_gms[i].queryIdx]);
-                inGoodDescriptors.push_back(inOut->descriptors[ matches_gms[i].queryIdx]);
+                inGoodPoints.push_back(in->points[matches_gms[i].queryIdx]);
+                inGoodDescriptors.push_back(in->descriptors[matches_gms[i].queryIdx]);
 
                 outGoodPoints.push_back(out->points[ matches_gms[i].trainIdx ]);
                 outGoodDescriptors.push_back(out->descriptors[ matches_gms[i].trainIdx ]);
             }
             out->points = outGoodPoints;
             out->descriptors = outGoodDescriptors;
+            in->points = inGoodPoints;
+            in->descriptors = inGoodDescriptors;
 
-            inOut->points = inGoodPoints;
-            inOut->descriptors = inGoodDescriptors;
             return out;
         }
 
-
-        vector< vector<Point2f> >  RestrictPointsKnn(Size size, std::vector<std::vector<Point2f> > frames,
+        void  RestrictPointsKnn(Size size,  shared_ptr<FrameDescriptor>  in, shared_ptr<FrameDescriptor> out,
                                                      int pointsCount = 9){
             // Get matches that are near to point
-            auto & obj = frames[0];
+            auto & inPts = in->GetPointsOnFrame();
+            auto & outPts = out->GetPointsOnFrame();
             flann::KDTreeIndexParams indexParams;
-            flann::Index kdtree(Mat(obj).reshape(1), indexParams);
+            flann::Index kdtree(Mat(outPts).reshape(1), indexParams);
             vector<float> query;
             query.push_back( size.width/4 + rand() % (size.width / 2) );
             query.push_back( size.height/4 + rand() % (size.height / 2 ));
             vector<int> indices;
             vector<float> dists;
 
+            vector<Point2f> inGoodPoints;
+            vector<Point2f> outGoodPoints;
             kdtree.knnSearch(query, indices, dists, pointsCount);
 
-            auto fsize = frames.size();
-            vector< vector<Point2f> > result(fsize);
 
             for( size_t i = 0; i < pointsCount; i++ ) {
-                for(size_t j = 0; j < fsize; j++) {
-                    result[j].push_back(frames[j][i]);
-                    cout << frames[j][i] << endl;
-                }
-                cout << "---" << endl;
-
+                inGoodPoints.push_back(inPts[i]);
+                outGoodPoints.push_back(outPts[i]);
             }
-            return result;
-        }
-
-        vector< vector<Point2f> >  GetPointTracks( vector<shared_ptr<FrameDescriptor> > & frames){
-            auto fsize = frames.size();
-            auto psize = frames[0]->points.size();
-            vector< vector<Point2f> > fromFrames(fsize);
-            for( size_t i = 0; i < fsize; i++ ) {
-                for(size_t j = 0; j < psize; j++) {
-                    fromFrames[i].push_back(frames[i]->points[j].pt);
-                }
-            }
-            auto frameSize = frames[0]->frame.size();
-            auto result = RestrictPointsKnn(frameSize, fromFrames);
-            return fromFrames;
+            in->SetPointsOnFrame(inGoodPoints);
+            out->SetPointsOnFrame(outGoodPoints);
         }
 
         struct MoveDescriptor {
@@ -338,19 +341,27 @@ namespace flame {
                     Transition(0,0,0),
                     Rotation(0,0,0,0)
             {}
-            MoveDescriptor(vector<shared_ptr<FrameDescriptor> > fd , Mat &K){
+            MoveDescriptor(shared_ptr<FrameDescriptor> from, shared_ptr<FrameDescriptor> to,  Mat &K){
+                RestrictPointsKnn(from->frame.size(), from, to, 9);
+                auto & inPts = from->GetPointsOnFrame();
+                auto & outPts = to->GetPointsOnFrame();
+                
+                cout << "m1" << endl;
+                auto F = findFundamentalMat(inPts, outPts, CV_FM_8POINT);
 
-            //MoveDescriptor(FrameDescriptor &from, FrameDescriptor &to, Mat &K){
-                //vector<FrameDescriptor* > fd = {&from, &to};
-                auto tracks = GetPointTracks(fd);
+                cout << "m2" << endl;
+                Mat E;
+                essentialFromFundamental(F, K, K, E);
 
-                bool is_projective = false;
-                vector<Mat> Rs_est, ts_est, points3d_estimated;
-                reconstruct(tracks, Rs_est, ts_est, K, points3d_estimated, is_projective);
-                auto t = ts_est[1];
-                Transition = Eigen::Vector3f(t.at<float>(0),t.at<float>(1),t.at<float>(2));
+                cout << "m3" << endl;
+                Mat R, T;
+                recoverPose(E, inPts, outPts,K, R, T);
 
-                Rotation = GetQuaternion(Rs_est[1]);
+                cout << "m4" << endl;
+
+                Transition = Eigen::Vector3f(T.at<float>(0),T.at<float>(1),T.at<float>(2));
+
+                Rotation = GetQuaternion(R);
             }
 
             Sophus::SE3f GetPose() {
@@ -367,7 +378,7 @@ namespace flame {
 
             fs::path exe_path(exe_str);
 
-            std::string base_dir = exe_path.parent_path().string();
+            string base_dir = exe_path.parent_path().string();
 
             VideoCapture capture("/flame/v.avi");
             auto K = ReadCameraC("/flame/camera_c.txt");
@@ -400,28 +411,24 @@ namespace flame {
 
             cv::Mat1b bw_frame;
             cv::cvtColor(frame, bw_frame, CV_BGR2GRAY);
-            vector<shared_ptr<FrameDescriptor> > fds;
             auto lastFrame = make_shared<FrameDescriptor>();
             auto currentFrame = make_shared<FrameDescriptor>();
-            lastFrame = GetDescriptor(bw_frame, lastFrame);
-            fds.push_back(lastFrame);
+            lastFrame = GetDescriptor(bw_frame);
             for(;;) {
                 cv::Mat1b bw_newframe;
 
-                for(int i = 0; i < 30; i++) {
-                    cout << "+" << endl;
-                    capture >> frame;
-                    if (frame.empty()) {
-                        break;
-                    }
-                    cv::cvtColor(frame, bw_newframe, CV_BGR2GRAY);
-                    currentFrame = GetDescriptor(bw_newframe, fds[i]);
-                    fds.push_back(currentFrame);
+                cout << "+" << endl;
+                capture >> frame;
+                if (frame.empty()) {
+                    break;
                 }
+                auto t_start = chrono::high_resolution_clock::now();
 
+                cv::cvtColor(frame, bw_newframe, CV_BGR2GRAY);
+                currentFrame = GetDescriptor(bw_newframe, lastFrame);
                 cout << "2" << endl;
 
-                MoveDescriptor md(fds, K);
+                MoveDescriptor md(lastFrame, currentFrame, K);
                 cout << "3" << endl;
 
                 cv::Mat1f depth;
@@ -429,23 +436,18 @@ namespace flame {
                      << "rot: " << md.Rotation.vec() << endl;
 
                 Sophus::SE3f T_new = md.GetPose();
-
+                auto t_end = chrono::high_resolution_clock::now();
+                cout << "getting pos/rot ready took: " <<  chrono::duration<double, milli>(t_end-t_start).count() << " milliseconds" << endl;
                 // Feed to Flame
                 f.update(time, time, T_new, bw_newframe, true, depth);
+
                 auto wf = f.getDebugImageWireframe();
                 auto idm = f.getDebugImageInverseDepthMap();
                 videoOutWireframe.write(wf);
                 videoOutDepth.write(idm);
+
                 lastFrame = currentFrame;
                 cout << "frame " << ++time << endl;
-                if(lastFrame->points.size()<100) {
-                    auto empty = make_shared<FrameDescriptor>();
-                    lastFrame = GetDescriptor(bw_newframe, empty);
-                    cout << "regenerating points" << endl;
-                }
-                fds.clear();
-                fds.push_back(lastFrame);
-
             }
 
             videoOutWireframe.release();
@@ -453,740 +455,6 @@ namespace flame {
 
             EXPECT_TRUE(true);
 
-        }
-
-/**
- * \brief Test minDepthProjection with translations in X direction.
- */
-        TEST(EpipolarGeometryTest, minDepthProjectionXTranslate2) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640.0/2,
-                    0, 525, 480.0/2,
-                    0, 0, 1;
-
-            cv::Point2f u_ref(320, 0);
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-
-            // Positive X translation
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f(2, 0, 0));
-            cv::Point2f u_min1;
-            epigeo.minDepthProjection(u_ref, &u_min1);
-
-            EXPECT_TRUE(u_min1.x > K(0, 2)*2);
-            EXPECT_NEAR(0, u_min1.y, 1e-3);
-
-            // Negative X translation.
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f(-2, 0, 0));
-            cv::Point2f u_min2;
-            epigeo.minDepthProjection(u_ref, &u_min2);
-
-            EXPECT_TRUE(u_min2.x < 0);
-            EXPECT_NEAR(0, u_min2.y, 1e-3);
-        }
-
-/**
- * \brief Test minDepthProjection with translations in Y direction.
- */
-        TEST(EpipolarGeometryTest, minDepthProjectionYTranslate1) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640.0/2,
-                    0, 525, 480.0/2,
-                    0, 0, 1;
-
-            cv::Point2f u_ref(320, 240);
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-
-            // Positive Y translation
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f(0, 2, 0));
-            cv::Point2f u_min1;
-            epigeo.minDepthProjection(u_ref, &u_min1);
-
-            EXPECT_TRUE(u_min1.y > K(1, 2)*2);
-            EXPECT_NEAR(320, u_min1.x, 1e-3);
-
-            // Negative Y translation.
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f(0, -2, 0));
-            cv::Point2f u_min2;
-            epigeo.minDepthProjection(u_ref, &u_min2);
-
-            EXPECT_TRUE(u_min2.y < 0);
-            EXPECT_NEAR(320, u_min2.x, 1e-3);
-        }
-
-/**
- * \brief Test minDepthProjection with translations in Y direction.
- */
-        TEST(EpipolarGeometryTest, minDepthProjectionYTranslate2) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640.0/2,
-                    0, 525, 480.0/2,
-                    0, 0, 1;
-
-            cv::Point2f u_ref(0, 240);
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-
-            // Positive Y translation
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f(0, 2, 0));
-            cv::Point2f u_min1;
-            epigeo.minDepthProjection(u_ref, &u_min1);
-
-            EXPECT_TRUE(u_min1.y > K(1, 2)*2);
-            EXPECT_NEAR(0, u_min1.x, 1e-3);
-
-            // Negative Y translation.
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f(0, -2, 0));
-            cv::Point2f u_min2;
-            epigeo.minDepthProjection(u_ref, &u_min2);
-
-            EXPECT_TRUE(u_min2.y < 0);
-            EXPECT_NEAR(0, u_min2.x, 1e-3);
-        }
-
-/**
- * \brief Test minDepthProjection when yawed.
- */
-        TEST(EpipolarGeometryTest, minDepthProjection60Yaw) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640.0/2,
-                    0, 525, 480.0/2,
-                    0, 0, 1;
-
-            Eigen::AngleAxisf aa21(-M_PI/3, Eigen::Vector3f::UnitY());
-            Eigen::Quaternionf q21(aa21);
-            Eigen::Vector3f t21(2, 0, 0);
-
-            Eigen::Quaternionf q12(q21.inverse());
-            Eigen::Vector3f t12(-(q12 * t21));
-
-            cv::Point2f u_ref(320, 240);
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            double tol = 1e-4;
-
-            // ref = 1, cmp = 2
-            epigeo.loadGeometry(q12, t12);
-
-            cv::Point2f u_min1;
-            epigeo.minDepthProjection(u_ref, &u_min1);
-
-            EXPECT_NEAR(16.8910904, u_min1.x, tol);
-            EXPECT_NEAR(240, u_min1.y, tol);
-
-            // ref = 2, cmp = 1
-            epigeo.loadGeometry(q21, t21);
-
-            cv::Point2f u_min2;
-            epigeo.minDepthProjection(u_ref, &u_min2);
-
-            EXPECT_NEAR(1049999424, u_min2.x, tol);
-            EXPECT_NEAR(240, u_min2.y, tol);
-        }
-
-/**
- * \brief Test using real data point where ref cam is in front of cmp cam.
- */
-        TEST(EpipolarGeometryTest, minDepthProjectionRefFontCmp) {
-            Eigen::Matrix3f K;
-            K << 535.43310546875f, 0.0f, 320.106652814575f,
-                    0.0f, 539.212524414062f, 247.632132204719f,
-                    0.0f, 0.0f, 1.0f;
-
-            Eigen::Quaternionf q_ref_to_cmp(0.999138, -0.000878, 0.041493, 0.000386);
-            Eigen::Vector3f t_ref_to_cmp(-0.221092, -0.036134, 0.084099);
-
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            epigeo.loadGeometry(q_ref_to_cmp, t_ref_to_cmp);
-
-            cv::Point2f u_zero;
-            epigeo.minDepthProjection(cv::Point2f(320, 240), &u_zero);
-
-            double tol = 1e-2;
-            EXPECT_NEAR(-1087.525391, u_zero.x, tol);
-            EXPECT_NEAR(15.954912, u_zero.y, tol);
-        }
-
-/**
- * \brief Test using real data point where ref cam is behind cmp cam.
- */
-        TEST(EpipolarGeometryTest, minDepthProjectionRefBehindCmp) {
-            Eigen::Matrix3f K;
-            K << 535.43310546875f, 0.0f, 320.106652814575f,
-                    0.0f, 539.212524414062f, 247.632132204719f,
-                    0.0f, 0.0f, 1.0f;
-
-            Eigen::Quaternionf q_ref_to_cmp(-0.999853, 0.014856, -0.005249, -0.006822);
-            Eigen::Vector3f t_ref_to_cmp(-0.258187, 0.040849, -0.054990);
-
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            epigeo.loadGeometry(q_ref_to_cmp, t_ref_to_cmp);
-
-            cv::Point2f u_zero;
-            epigeo.minDepthProjection(cv::Point2f(320, 240), &u_zero);
-
-            double tol = 1e-1;
-            EXPECT_NEAR(187.65597534179688, u_zero.x, tol);
-            EXPECT_NEAR(278.55392456054688, u_zero.y, tol);
-        }
-
-/**
- * \brief Test maxDepthProjection when ref and cmp camera have the same pose.
- */
-        TEST(EpipolarGeometryTest, maxDepthProjectionIdentity) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640/2,
-                    0, 525, 480/2,
-                    0, 0, 1;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            EpipolarGeometry<float> epigeo(K, Kinv);
-            epigeo.loadGeometry(Eigen::Quaternionf::Identity(), Eigen::Vector3f::Zero());
-
-            cv::Point2f u_ref(320, 240);
-            cv::Point2f u_cmp;
-            epigeo.maxDepthProjection(u_ref, &u_cmp);
-
-            float tol = 1e-3;
-            EXPECT_NEAR(u_ref.x, u_cmp.x, tol);
-            EXPECT_NEAR(u_ref.y, u_cmp.y, tol);
-        }
-
-/**
- * \brief Test maxDepthProjection when yawed.
- */
-        TEST(EpipolarGeometryTest, maxDepthProjection30Yaw) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640/2,
-                    0, 525, 480/2,
-                    0, 0, 1;
-            Eigen::AngleAxisf aa_right(-M_PI/6, Eigen::Vector3f::UnitY());
-            Eigen::Quaternionf q_right(aa_right);
-
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            epigeo.loadGeometry(q_right, Eigen::Vector3f::Zero());
-
-            cv::Point2f u_ref(320, 240);
-            cv::Point2f u_cmp;
-            epigeo.maxDepthProjection(u_ref, &u_cmp);
-
-            double tol = 1e-4;
-            EXPECT_NEAR(16.891090393066406, u_cmp.x, tol);
-            EXPECT_NEAR(240, u_cmp.y, tol);
-        }
-
-/**
- * \brief Test maxDepthProjection when rolled.
- */
-        TEST(EpipolarGeometryTest, maxDepthProjection30Roll) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640/2,
-                    0, 525, 480/2,
-                    0, 0, 1;
-            Eigen::AngleAxisf aa_right(-M_PI/6, Eigen::Vector3f::UnitX());
-            Eigen::Quaternionf q_right(aa_right);
-
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            epigeo.loadGeometry(q_right, Eigen::Vector3f::Zero());
-
-            cv::Point2f u_ref(320, 240);
-            cv::Point2f u_cmp;
-            epigeo.maxDepthProjection(u_ref, &u_cmp);
-
-            double tol = 1e-4;
-            EXPECT_NEAR(320, u_cmp.x, tol);
-            EXPECT_NEAR(543.10888671875, u_cmp.y, tol);
-        }
-
-        TEST(EpipolarGeometryTest, epiline60Yaw) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640/2,
-                    0, 525, 480/2,
-                    0, 0, 1;
-
-            Eigen::AngleAxisf aa_right_to_left(-M_PI/3, Eigen::Vector3f::UnitY());
-            Eigen::Quaternionf q_right_to_left(aa_right_to_left);
-            Eigen::Vector3f t_right_to_left(2, 0, 0);
-
-            Eigen::Quaternionf q_left_to_right(aa_right_to_left.inverse());
-            Eigen::Vector3f t_left_to_right(-(q_right_to_left * t_right_to_left));
-
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            epigeo.loadGeometry(q_left_to_right, t_left_to_right);
-
-            cv::Point2f u_ref(320, 240);
-            cv::Point2f u_inf, epi;
-            epigeo.epiline(u_ref, &u_inf, &epi);
-
-            double tol = 1e-4;
-            EXPECT_NEAR(1, epi.x, tol);
-            EXPECT_NEAR(0, epi.y, tol);
-        }
-
-        TEST(EpipolarGeometryTest, epiline60Roll) {
-            Eigen::Matrix3f K;
-            K << 525, 0, 640/2,
-                    0, 525, 480/2,
-                    0, 0, 1;
-
-            Eigen::AngleAxisf aa_right_to_left(M_PI/3, Eigen::Vector3f::UnitX());
-            Eigen::Quaternionf q_right_to_left(aa_right_to_left);
-            Eigen::Vector3f t_right_to_left(0, 2, 0);
-
-            Eigen::Quaternionf q_left_to_right(aa_right_to_left.inverse());
-            Eigen::Vector3f t_left_to_right(-(q_right_to_left * t_right_to_left));
-
-            EpipolarGeometry<float> epigeo(K, K.inverse());
-            epigeo.loadGeometry(q_left_to_right, t_left_to_right);
-
-            cv::Point2f u_ref(320, 240);
-            cv::Point2f u_inf, epi;
-            epigeo.epiline(u_ref, &u_inf, &epi);
-
-            double tol = 1e-4;
-            EXPECT_NEAR(0, epi.x, tol);
-            EXPECT_NEAR(1, epi.y, tol);
-        }
-
-/**
- * \brief Test point at (1, 0, 10) with cameras 1m apart and yawed -15 deg.
- *
- * T1 = -15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (1, 0, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToDepthTest1) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(-M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(1.0f, 0.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float depth1 = epigeo1.disparityToDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR((T1.inverse() * p_world)(2), depth1, tol);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float depth2 = epigeo2.disparityToDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR((T2.inverse() * p_world)(2), depth2, tol);
-        }
-
-/**
- * \brief Test point at (-1, 0, 10) with cameras 1m apart and yawed -15 deg.
- *
- * T1 = -15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (-1, 0, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToDepthTest2) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(-M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(-1.0f, 0.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float depth1 = epigeo1.disparityToDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR((T1.inverse() * p_world)(2), depth1, tol);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float depth2 = epigeo2.disparityToDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR((T2.inverse() * p_world)(2), depth2, tol);
-        }
-
-/**
- * \brief Test point at (0, 1, 10) with cameras 1m apart and yawed 15 deg.
- *
- * T1 = 15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (0, 1, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToDepthTest3) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(0.0f, 1.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float depth1 = epigeo1.disparityToDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR((T1.inverse() * p_world)(2), depth1, tol);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float depth2 = epigeo2.disparityToDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR((T2.inverse() * p_world)(2), depth2, tol);
-        }
-
-/**
- * \brief Test point at (0, -1, 10) with cameras 1m apart and yawed 15 deg.
- *
- * T1 = 15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (0, -1, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToDepthTest4) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(0.0f, -1.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float depth1 = epigeo1.disparityToDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR((T1.inverse() * p_world)(2), depth1, tol);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float depth2 = epigeo2.disparityToDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR((T2.inverse() * p_world)(2), depth2, tol);
-        }
-
-/**
- * \brief Test point at (1, 0, 10) with cameras 1m apart and yawed -15 deg.
- *
- * T1 = -15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (1, 0, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToInverseDepthTest1) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(-M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(1.0f, 0.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float idepth1 = epigeo1.disparityToInverseDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR(1.0f/(T1.inverse() * p_world)(2), idepth1, tol);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float idepth2 = epigeo2.disparityToInverseDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR(1.0f/(T2.inverse() * p_world)(2), idepth2, tol);
-        }
-
-/**
- * \brief Test point at (-1, 0, 10) with cameras 1m apart and yawed -15 deg.
- *
- * T1 = -15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (-1, 0, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToInverseDepthTest2) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(-M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(-1.0f, 0.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float idepth1 = epigeo1.disparityToInverseDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR(1.0f/(T1.inverse() * p_world)(2), idepth1, tol);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float idepth2 = epigeo2.disparityToInverseDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR(1.0f/(T2.inverse() * p_world)(2), idepth2, tol);
-        }
-
-/**
- * \brief Test point at (0, 1, 10) with cameras 1m apart and yawed 15 deg.
- *
- * T1 = 15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (0, 1, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToInverseDepthTest3) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(0.0f, 1.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float idepth1 = epigeo1.disparityToInverseDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR(1.0f/(T1.inverse() * p_world)(2), idepth1, 1e-2);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float idepth2 = epigeo2.disparityToInverseDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR(1.0f/(T2.inverse() * p_world)(2), idepth2, tol);
-        }
-
-/**
- * \brief Test point at (0, -1, 10) with cameras 1m apart and yawed 15 deg.
- *
- * T1 = 15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (0, -1, 10)
- */
-        TEST(EpipolarGeometryTest, disparityToInverseDepthTest4) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(0.0f, -1.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            cv::Point2f u_inf, epi;
-            float tol = 1e-4;
-
-            // Depth from camera 1.
-            EpipolarGeometry<float> epigeo1(K, Kinv);
-            epigeo1.loadGeometry(T12.unit_quaternion(), T12.translation());
-            float disp1 = epigeo1.disparity(u1, u2, &u_inf, &epi);
-            float idepth1 = epigeo1.disparityToInverseDepth(u1, u_inf, epi, disp1);
-            EXPECT_NEAR(1.0f/(T1.inverse() * p_world)(2), idepth1, 1e-2);
-
-            // Depth from camera 2.
-            EpipolarGeometry<float> epigeo2(K, Kinv);
-            epigeo2.loadGeometry(T21.unit_quaternion(), T21.translation());
-            float disp2 = epigeo2.disparity(u2, u1, &u_inf, &epi);
-            float idepth2 = epigeo2.disparityToInverseDepth(u2, u_inf, epi, disp2);
-            EXPECT_NEAR(1.0f/(T2.inverse() * p_world)(2), idepth2, tol);
-        }
-
-
-/**
- * \brief Test point at (1, 0, 10) with cameras 1m apart and yawed -15 deg.
- *
- * Test projecting point between two cameras.
- *
- * T1 = -15 deg yaw
- * T2 = (1, 0, 0) trans
- * p_world = (1, 0, 10)
- */
-        TEST(EpipolarGeometryTest, projectTest1) {
-            Eigen::Matrix3f K;
-            K << 525.0f, 0.0f, 320.0f,
-                    0.0f, 525.0f, 240.0f,
-                    0.0f, 0.0f, 1.0f;
-            Eigen::Matrix3f Kinv(K.inverse());
-
-            // Geometry of cameras and landmarks.
-            Eigen::AngleAxisf aa(-M_PI/12, Eigen::Vector3f::UnitY());
-            Sophus::SE3f T1(Eigen::Quaternionf(aa), Eigen::Vector3f::Zero());
-            Sophus::SE3f T2(Eigen::Quaternionf::Identity(),
-                            Eigen::Vector3f(1.0f, 0.0f, 0.0f));
-            Eigen::Vector3f p_world(1.0f, 0.0f, 10.0f);
-
-            // Project into cameras.
-            Sophus::SE3f T12(T2.inverse() * T1);
-            Sophus::SE3f T21(T1.inverse() * T2);
-
-            cv::Point2f u1 = EpipolarGeometry<float>::project(K, T1.unit_quaternion(),
-                                                              T1.translation(),
-                                                              p_world);
-            cv::Point2f u2 = EpipolarGeometry<float>::project(K, T2.unit_quaternion(),
-                                                              T2.translation(),
-                                                              p_world);
-
-            EpipolarGeometry<float> epigeo(K, Kinv);
-
-            epigeo.loadGeometry(T21.unit_quaternion(), T21.translation());
-
-            cv::Point2f u_cmp = epigeo.project(u2, 1.0f/p_world(2));
-            EXPECT_NEAR(u1.x, u_cmp.x, 1e-4);
-            EXPECT_NEAR(u1.y, u_cmp.y, 1e-4);
         }
 
     }  // namespace stereo

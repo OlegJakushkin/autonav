@@ -14,14 +14,17 @@ set(${PROJECT_NAME}_VERSION 1.0.0)
 option(BUILD_DOCUMENTATION "Use Doxygen to create the HTML based API documentation" OFF)
 option(BUILD_TESTS "Use GTest to build and test libraries" ON)
 
-option(WITH_COVERAGE "Compile with code coverage" ON)
-if (WITH_COVERAGE)
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -fprofile-arcs -ftest-coverage")
-  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -fprofile-arcs -ftest-coverage")
-  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
-endif ()
 
-add_definitions("-std=c++11  -g -o0")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -g -O0 -fprofile-arcs -ftest-coverage")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -fprofile-arcs -ftest-coverage")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -Ofast -ffast-math -march=native")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}  -std=c++11 -Ofast -ffast-math -march=native")
+
+
+
+#add_definitions("-std=c++11  -g -o3")
 
 # Add package setup file.
 include(cmake/setup.cmake)
@@ -52,7 +55,7 @@ install_pkg_config_file(${PROJECT_NAME}
   LIBS ${PROJECT_NAME}
   VERSION ${${PROJECT_NAME}_VERSION}
   REQUIRES opencv eigen3>=3.2
-  CFLAGS "-std=c++11 -g -o2")
+  CFLAGS "-std=c++11 -Ofast -ffast-math")
 
 # Configuration method 2: pure cmake, no import/export
 configure_file(${PROJECT_SOURCE_DIR}/cmake/templates/${PROJECT_NAME}Config.cmake.in

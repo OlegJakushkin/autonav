@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="flame" targetName="flame_test" />
       <config projectName="flame" targetName="flame" />
+      <config projectName="flame" targetName="flame_test" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -31,26 +31,26 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug-Remote Host" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm/reconstruct.hpp">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="73" column="52" selection-start-line="73" selection-start-column="41" selection-end-line="73" selection-end-column="52" />
+            <state relative-caret-position="5814">
+              <caret line="427" column="35" selection-start-line="427" selection-start-column="35" selection-end-line="427" selection-end-column="35" />
               <folding>
-                <element signature="e#2206#2223#0" expanded="true" />
+                <element signature="e#1573#3214#0" />
+                <element signature="e#3294#5099#0" />
+                <element signature="e#7231#7258#0" expanded="true" />
+                <element signature="e#8873#9041#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="215" column="65" lean-forward="true" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="65" />
-              <folding>
-                <element signature="e#852#871#0" expanded="true" />
-              </folding>
+            <state>
+              <caret column="5" selection-start-column="4" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -58,56 +58,9 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="586">
-              <caret line="141" lean-forward="true" selection-start-line="141" selection-end-line="141" />
+            <state relative-caret-position="2397">
+              <caret line="141" selection-start-line="141" selection-end-line="141" />
             </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm/robust.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-663" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm/io.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-841" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm/fundamental.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3085" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm/conditioning.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1071" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm/numeric.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-867" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/shape.hpp">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/usr/include/opencv2/sfm.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1096" />
           </provider>
         </entry>
       </file>
@@ -115,9 +68,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cvSobel</find>
-      <find>imgproc</find>
-      <find>g++</find>
       <find>gcc</find>
       <find>cvRodrigues</find>
       <find>cvRodrigues2</find>
@@ -145,6 +95,9 @@
       <find>errorgraphic_counter</find>
       <find>SE3Group</find>
       <find>Could not initialize capturing from file&quot;</find>
+      <find>RestrictPointsKnn</find>
+      <find>std::</find>
+      <find>KeyFrameSelector</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -198,9 +151,8 @@
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
     <option name="x" value="-11" />
-    <option name="y" value="1" />
-    <option name="width" value="3050" />
-    <option name="height" value="2108" />
+    <option name="width" value="1940" />
+    <option name="height" value="1061" />
   </component>
   <component name="ProjectId" id="1ZFqyLnXUIFFXyV1r7aYefmQz15" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -209,7 +161,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -287,6 +238,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -384,43 +336,45 @@
       <workItem from="1588346730107" duration="599000" />
       <workItem from="1588431957920" duration="14643000" />
       <workItem from="1588478937561" duration="8879000" />
+      <workItem from="1588517911469" duration="10801000" />
+      <workItem from="1589359122264" duration="5237000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 04m 13s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 18h 47m 50s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 06m 02s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 18h 55m 28s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 09m 27s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 19h 12m 34s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 10m 24s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 21h 09m 36s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 12m 23s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 12h 58m 40s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 14m 24s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 12h 59m 35s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 16m 48s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 13h 01m 14s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 18m 25s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 13h 02m 52s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 27m 42s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 13h 09m 20s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.03 at 09h 30m 46s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 13h 12m 39s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="106171000" />
+    <option name="totallyTimeSpent" value="122209000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -432,15 +386,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="1" width="2033" height="1405" extended-state="0" />
+    <frame x="-7" y="0" width="1293" height="707" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2965028" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20356853" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39905736" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2504348" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39828527" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32914376" />
@@ -449,12 +404,12 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32869565" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.3299293" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.27965435" />
-      <window_info anchor="bottom" id="File Transfer" order="12" weight="0.15396701" />
-      <window_info anchor="bottom" id="Messages" order="13" weight="0.3267871" />
+      <window_info anchor="bottom" id="File Transfer" order="12" weight="0.15276696" />
+      <window_info anchor="bottom" id="Messages" order="13" weight="0.32501948" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Remote Host" order="3" visible="true" weight="0.2189559" />
+      <window_info anchor="right" id="Remote Host" order="3" weight="0.24249797" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="make" order="5" />
     </layout>
@@ -519,22 +474,6 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="173" width="672" height="676" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1585049817912" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc</url>
-          <line>349</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc</url>
-          <line>347</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/test/CMakeLists.txt">
@@ -672,13 +611,6 @@
         <state relative-caret-position="-246" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/features2d.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-4411">
@@ -686,20 +618,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
+    <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
-          <caret line="141" lean-forward="true" selection-start-line="141" selection-end-line="141" />
+        <state relative-caret-position="5814">
+          <caret line="427" column="35" selection-start-line="427" selection-start-column="35" selection-end-line="427" selection-end-column="35" />
+          <folding>
+            <element signature="e#1573#3214#0" />
+            <element signature="e#3294#5099#0" />
+            <element signature="e#7231#7258#0" expanded="true" />
+            <element signature="e#8873#9041#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="215" column="65" lean-forward="true" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="65" />
-          <folding>
-            <element signature="e#852#871#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="5" selection-start-column="4" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2397">
+          <caret line="141" selection-start-line="141" selection-end-line="141" />
         </state>
       </provider>
     </entry>
