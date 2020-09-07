@@ -23,6 +23,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 #include <chrono>
 #include <unordered_map>
 #include <limits>
@@ -99,6 +100,8 @@ class StatsTracker final {
    */
   void tick(const std::string& key) {
     std::lock_guard<std::mutex> lock(mtx_);
+    //TODO remove std output!
+    //std::cout << key << std::endl;
     start_times_[prefix_ + key] = clock::now();
     return;
   }

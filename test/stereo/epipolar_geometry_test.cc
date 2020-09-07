@@ -237,23 +237,23 @@ namespace flame {
             MoveDescriptor(shared_ptr<FrameDescriptor> from, shared_ptr<FrameDescriptor> to,  Mat &K){
                 from->BakePointsOnFrame();
                 to->BakePointsOnFrame();
-                //RestrictPointsKnn(from->frame.size(), from, to, 9);
+                //RestrictPointsKnn(from->frame.size(), from, to, 20);
                 auto & inPts = from->GetPointsOnFrame();
                 auto & outPts = to->GetPointsOnFrame();
-                cout << "m1" << endl;
+               // cout << "m1" << endl;
                 cout << inPts.size() << " " << outPts.size() << endl;
 
-                auto F = findFundamentalMat(inPts, outPts, CV_FM_LMEDS );
+                auto F = findFundamentalMat(inPts, outPts, CV_FM_RANSAC );
 
-                cout << "m2" << endl;
+              //  cout << "m2" << endl;
                 Mat E;
                 essentialFromFundamental(F, K, K, E);
 
-                cout << "m3" << endl;
+                //cout << "m3" << endl;
                 Mat R, T;
                 recoverPose(E, inPts, outPts,K, R, T);
 
-                cout << "m4" << endl;
+                //cout << "m4" << endl;
 
                 Transition = Eigen::Vector3f(T.at<float>(0),T.at<float>(1),T.at<float>(2));
 
@@ -287,6 +287,7 @@ namespace flame {
 
             cv::Mat3b frame;
             capture >> frame;
+            resize(frame, frame, Size(320, 240));
             Mat Kinv = K.inv();
             Matrix3f Ke, Keinv;
             cv2eigen(K, Ke);
@@ -297,10 +298,10 @@ namespace flame {
                             Ke,
                             Keinv );
 
-            VideoWriter videoOutWireframe("/flame/out_wires.avi",CV_FOURCC('F','M','P','4'),10, fsize);
-            VideoWriter videoOutDepth("/flame/out_depth.avi",CV_FOURCC('F','M','P','4'),10, fsize);
+            VideoWriter videoOutWireframe("/flame/media/out_wires.avi",CV_FOURCC('F','M','P','4'),10, fsize);
+            VideoWriter videoOutDepth("/flame/media/out_depth.avi",CV_FOURCC('F','M','P','4'),10, fsize);
 
-            auto time = 0;
+            auto time = 1;
 
             // Detect and track Points
             // Reconstruct pos/rot https://docs.opencv.org/3.4/da/db5/group__reconstruction.html#gaadb8cc60069485cbb9273b1efebd757d
@@ -310,54 +311,79 @@ namespace flame {
             auto lastFrame = make_shared<FrameDescriptor>();
             auto currentFrame = make_shared<FrameDescriptor>();
             lastFrame = GetDescriptor(bw_frame);
+            auto lastLastFrame = GetDescriptor(bw_frame);
+            auto fps = capture.get(CAP_PROP_FPS);
+
             for(;;) {
                 cv::Mat1b bw_newframe;
 
-                cout << "+" << endl;
+                //cout << "+" << endl;
                 capture >> frame;
+
                 if (frame.empty()) {
                     break;
                 }
-                auto t_start = chrono::high_resolution_clock::now();
+                resize(frame, frame, Size(320, 240));
 
+                auto t_start = chrono::high_resolution_clock::now();
+                bool pose = false;
+                if (time % 1 == 0) {
+                    pose = true;
+                    lastFrame = lastLastFrame;
+                    //    imwrite("/flame/last.png", lastFrame->frame);
+                    if(time==38) {
+                        break;
+                    }
+                }
                 cv::cvtColor(frame, bw_newframe, CV_BGR2GRAY);
                 currentFrame = GetDescriptor(bw_newframe, lastFrame);
-                imwrite("/flame/current.png", currentFrame->frame);
-                cout << "2" << endl;
+                //imwrite("/flame/current.png", currentFrame->frame);
+                //cout << "2" << endl;
 
                 MoveDescriptor md(lastFrame, currentFrame, K);
-                cout << "3" << endl;
+                //cout << "3" << endl;
 
                 Sophus::SE3f T_new = md.GetPose();
                 auto t_end = chrono::high_resolution_clock::now();
 
-                cout << "pos: " << md.Transition << endl
-                     << "rot: " << md.Rotation.vec() << endl;
+                //cout << "pos: " << md.Transition << endl
+                //     << "rot: " << md.Rotation.vec() << endl;
 
-                cout << "getting pos/rot ready took: " <<  chrono::duration<double, milli>(t_end-t_start).count() << " milliseconds" << endl;
+                cout << "getting pos/rot ready took: " << chrono::duration<double, milli>(t_end - t_start).count()
+                     << " milliseconds" << endl;
                 // Feed to Flame
                 cv::Mat1f depth;
-                try {
-                f.update(time, time, T_new, bw_newframe, true, depth);
-                } catch (exception & e) {
-                    cout << "Error: " << e.what() << endl;
+                bool update_success = false;
+                auto durationInSeconds = float(time) / float(fps);
+                imwrite("/flame/media/bwf.png", bw_newframe);
+
+                auto m = bw_newframe.clone();
+                update_success = f.update(durationInSeconds, time, T_new, m, pose);
+                imwrite("/flame/media/iff.png", f.getDebugImageFeatures());
+                imwrite("/flame/media/ifm.png", f.getDebugImageMatches());
+                if (pose) {
+                    lastLastFrame = currentFrame;
                 }
+                if (update_success){
+                    cout << "update sucsess" << endl;
+                }
+                //imwrite("/flame/last.png", lastFrame->frame);
+                if(update_success) {
+                    auto wf = f.getDebugImageWireframe();
+                    auto idm = f.getDebugImageInverseDepthMap();
 
-                auto wf = f.getDebugImageWireframe();
-                auto idm = f.getDebugImageInverseDepthMap();
-                imwrite("/flame/wf.png", wf);
-                imwrite("/flame/idm.png", wf);
-                imwrite("/flame/last.png", lastFrame->frame);
-                videoOutWireframe.write(wf);
-                videoOutDepth.write(idm);
-
+                    imwrite("/flame/media/wf"+to_string(time)+".png", wf);
+                    imwrite("/flame/media/idm"+to_string(time)+".png", idm);
+                    videoOutWireframe.write(wf);
+                    videoOutDepth.write(idm);
+                }
                 lastFrame = currentFrame;
                 cout << "frame " << ++time << endl;
             }
 
             videoOutWireframe.release();
             videoOutDepth.release();
-
+            cout << "ready!" << endl;
             EXPECT_TRUE(true);
 
         }

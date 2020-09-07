@@ -202,7 +202,7 @@ bool Flame::update(double time, uint32_t img_id,
                           params_.photo_error_num_pfs, &stats_);
 
       // Make sure we don't pick the same pf.
-      if (fcmp->id >= curr_pf_->id) {
+      if (fcmp == nullptr || fcmp->id >= curr_pf_->id) {
         fcmp = fprev_; // Use previous pf instead.
       }
     }

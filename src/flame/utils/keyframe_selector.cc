@@ -208,16 +208,29 @@ float KeyFrameSelector::score(int width, int height,
   float area = 0.0f;
   try {
     std::deque<BPolygon> intersection_poly;
+      if( bgeo::area(ref_poly) <0.1 ||  bgeo::area(new_poly) <0.1 ) {
+          fprintf(stderr, "KeyFrameSelector: Null areas!\n");
+          return std::numeric_limits<float>::lowest();
+      }
     bgeo::intersection(new_poly, ref_poly, intersection_poly);
+      auto ss = intersection_poly.size();
+      if(ss > 0) {
+          auto &is = intersection_poly[0];
+          // Check if intersection...intersects itself.
 
-    // Check if intersection...intersects itself.
-    bool self_intersects = bgeo::intersects(intersection_poly[0]);
-    if (self_intersects) {
-      fprintf(stderr, "KeyFrameSelector: Self intersection detected2!\n");
-      return std::numeric_limits<float>::lowest();
-    }
+          area = bgeo::area(is);
+          if (area > 0.1) {
+              bool self_intersects = bgeo::intersects(is);
+              if (self_intersects) {
+                  fprintf(stderr, "KeyFrameSelector: Self intersection detected2!\n");
+                  return std::numeric_limits<float>::lowest();
+              }
+          }
+      } else {
+          fprintf(stderr, "KeyFrameSelector: intersection not detected!\n");
+          return std::numeric_limits<float>::lowest();
+      }
 
-    area = bgeo::area(intersection_poly[0]);
   } catch (...) {
     fprintf(stderr, "WARNING: Caught exception from boost::intersection!\n");
     return std::numeric_limits<float>::lowest();

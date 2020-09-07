@@ -55,3 +55,4 @@ cmake-build-debug
 build
 GMS-Feature-Matcher
 cmake-build-debug-remote-host
+cmake-build-release-remote-host

@@ -2,22 +2,32 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="flame" targetName="flame" />
       <config projectName="flame" targetName="flame_test" />
+      <config projectName="flame" targetName="flame" />
     </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
+      <configuration PROFILE_NAME="Release-Remote Host" CONFIG_NAME="Release" TOOLCHAIN_NAME="Remote Host" BUILD_OPTIONS="-j 40" />
       <configuration PROFILE_NAME="Debug-Remote Host" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Remote Host" BUILD_OPTIONS="-j 40" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd8a926c-be54-48d2-b423-9d00a3d76f5e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_c.txt" beforeDir="false" afterPath="$PROJECT_DIR$/camera_c.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/flame/flame.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/flame/flame.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/flame/utils/stats_tracker.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/flame/utils/stats_tracker.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc" beforeDir="false" afterPath="$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v.avi" beforeDir="false" afterPath="$PROJECT_DIR$/v.avi" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug-remote-host/" />
+    <ignored path="$PROJECT_DIR$/cmake-build-release-remote-host/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,46 +40,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug-Remote Host" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="324" column="51" selection-start-line="324" selection-start-column="51" selection-end-line="324" selection-end-column="51" />
-              <folding>
-                <element signature="e#5109#5771#0" />
-                <element signature="e#5781#7144#0" />
-                <element signature="e#7231#7258#0" expanded="true" />
-                <element signature="e#8873#9041#0" expanded="true" />
-                <element signature="e#10702#11833#0" />
-                <element signature="e#8681#8778#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-151">
-              <caret line="795" column="17" selection-start-line="795" selection-start-column="17" selection-end-line="795" selection-end-column="17" />
-              <folding>
-                <element signature="e#17853#23261#0" />
-                <element signature="e#23263#25376#0" />
-                <element signature="e#27021#43174#0" />
-                <element signature="e#43176#52241#0" />
-                <element signature="e#52243#60969#0" />
-                <element signature="e#60971#64672#0" />
-                <element signature="e#64674#67265#0" />
-              </folding>
+            <state relative-caret-position="23">
+              <caret line="329" column="28" selection-start-line="329" selection-start-column="28" selection-end-line="329" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -77,30 +52,39 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="197" lean-forward="true" selection-start-line="197" selection-end-line="197" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/flame/flame.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="104">
-              <caret line="318" column="32" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
+            <state relative-caret-position="801">
+              <caret line="243" column="27" lean-forward="true" selection-start-line="243" selection-start-column="27" selection-end-line="243" selection-end-column="27" />
               <folding>
-                <element signature="e#848#865#0" expanded="true" />
-                <element signature="e#4516#5019#0" />
+                <element signature="e#847#889#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/core/mat.hpp">
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/flame/media/iff.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/flame/media/ifm.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/camera_c.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="2192" column="18" selection-start-line="2192" selection-start-column="13" selection-end-line="2192" selection-end-column="18" />
+            <state relative-caret-position="68">
+              <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="248">
+              <caret line="798" selection-start-line="798" selection-end-line="798" />
             </state>
           </provider>
         </entry>
@@ -109,15 +93,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cvRodrigues2</find>
-      <find>acquire_model</find>
-      <find>show_result</find>
-      <find>singlecalib</find>
-      <find>singlecalib.Po</find>
-      <find>.a</find>
-      <find>add_detected_homography</find>
-      <find>cli(EXEEXT)</find>
-      <find>augment3d$(EXEEXT)</find>
       <find>augment3d$</find>
       <find>top_srcdir</find>
       <find>augment3d-augment3d.o</find>
@@ -138,7 +113,16 @@
       <find>std::</find>
       <find>No intersection detected</find>
       <find>idepths_true</find>
+      <find>KeyFrameSelector: No intersection detected!</find>
+      <find>score</find>
       <find>KeyFrameSelector</find>
+      <find>cout</find>
+      <find>WARNING: fcmp null!</find>
+      <find>orb</find>
+      <find>detect</find>
+      <find>KeyPoint</find>
+      <find>kps</find>
+      <find>detectFeatures</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -181,19 +165,25 @@
         <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/b2/samples/singlecalib/Makefile.in" />
         <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/b2/garfeild/calib/CamCalibration.cpp" />
         <option value="&lt;5f0ef494-2a40-49b9-990e-92c7d042decb&gt;/root/b2/samples/singlecalib/cli.cpp" />
-        <option value="$PROJECT_DIR$/src/flame/flame.h" />
         <option value="$PROJECT_DIR$/Dockerfile.txt" />
         <option value="$PROJECT_DIR$/scripts/eigen.sh" />
+        <option value="$PROJECT_DIR$/src/flame/utils/stats_tracker.h" />
+        <option value="$PROJECT_DIR$/src/flame/utils/frame.cc" />
+        <option value="$PROJECT_DIR$/src/flame/utils/frame.h" />
+        <option value="$PROJECT_DIR$/src/flame/flame.h" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/src/flame/flame.cc" />
         <option value="$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc" />
+        <option value="$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc" />
+        <option value="$PROJECT_DIR$/camera_c.txt" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
     <option name="x" value="-11" />
-    <option name="width" value="1940" />
-    <option name="height" value="1094" />
+    <option name="width" value="2183" />
+    <option name="height" value="2111" />
   </component>
   <component name="ProjectId" id="1ZFqyLnXUIFFXyV1r7aYefmQz15" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -212,22 +202,6 @@
             <path>
               <item name="flame" type="b2602c69:ProjectViewProjectNode" />
               <item name="autonav" type="462c0819:PsiDirectoryNode" />
-              <item name="dependencies" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="autonav" type="462c0819:PsiDirectoryNode" />
-              <item name="dependencies" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="autonav" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="autonav" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -242,6 +216,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="flame" type="462c0819:PsiDirectoryNode" />
               <item name="external" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="flame" type="462c0819:PsiDirectoryNode" />
+              <item name="external" type="462c0819:PsiDirectoryNode" />
+              <item name="triangle" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="flame" type="b2602c69:ProjectViewProjectNode" />
@@ -267,7 +249,20 @@
             <path>
               <item name="flame" type="b2602c69:ProjectViewProjectNode" />
               <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="flame" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autonav" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="gtest" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="flame" type="b2602c69:ProjectViewProjectNode" />
@@ -299,7 +294,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/test/data" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -379,44 +374,45 @@
       <workItem from="1588431957920" duration="14643000" />
       <workItem from="1588478937561" duration="8879000" />
       <workItem from="1588517911469" duration="10801000" />
-      <workItem from="1589359122264" duration="9290000" />
+      <workItem from="1589359122264" duration="15975000" />
+      <workItem from="1589376157431" duration="17668000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 13h 09m 20s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 21h 45m 48s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 13h 12m 39s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 21h 48m 15s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 00m 17s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 21h 51m 44s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 01m 29s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 21h 53m 17s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 03m 43s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 21h 53m 56s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 06m 15s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 21h 57m 38s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 10m 42s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 22h 02m 13s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 11m 52s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 22h 24m 57s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 17m 32s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 23h 22m 59s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 14h 20m 33s.xml">
+    <history-entry file="EpipolarGeometryTest_minDepthProjectionXTranslate1 - 2020.05.13 at 23h 23m 45s.xml">
       <configuration name="EpipolarGeometryTest.minDepthProjectionXTranslate1" configurationId="CMakeGoogleTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="126262000" />
+    <option name="totallyTimeSpent" value="150615000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -428,30 +424,30 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1293" height="729" extended-state="0" />
+    <frame x="-7" y="0" width="1455" height="1407" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2514193" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22580644" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.8040201" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.40536013" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39698493" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.37256432" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3419608" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.39607844" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32914376" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3707777" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.37019607" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32869565" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.3299293" />
-      <window_info anchor="bottom" id="CMake" order="11" weight="0.27965435" />
-      <window_info anchor="bottom" id="File Transfer" order="12" weight="0.15276696" />
-      <window_info anchor="bottom" id="Messages" order="13" weight="0.53433836" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.2792157" />
+      <window_info anchor="bottom" id="File Transfer" order="12" weight="0.15215686" />
+      <window_info anchor="bottom" id="Messages" order="13" weight="0.532549" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Remote Host" order="3" weight="0.24249797" />
+      <window_info anchor="right" id="Remote Host" order="3" visible="true" weight="0.21433692" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="make" order="5" />
     </layout>
@@ -517,22 +513,6 @@
     </state>
     <state x="616" y="173" width="672" height="676" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1585049817912" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/flame/flame.cc</url>
-          <line>201</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc</url>
-          <line>198</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/calib3d.hpp">
       <provider selected="true" editor-type-id="text-editor">
@@ -578,16 +558,6 @@
     <entry file="file://$PROJECT_DIR$/scripts/sophus.sh">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/flame/types.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" selection-start-line="30" selection-end-line="30" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/camera_c.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/dependencies/src/Sophus/sophus/se3.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -626,13 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/core/types.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10880">
-          <caret line="640" column="26" selection-start-line="640" selection-start-column="26" selection-end-line="640" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/core/eigen.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-182">
@@ -659,13 +622,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="17" column="71" selection-start-line="17" selection-start-column="63" selection-end-line="17" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -673,10 +629,124 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wf.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/idm.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/last.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/current.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/my_map.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/boost/geometry/algorithms/detail/intersection/interface.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="919">
+          <caret line="289" column="12" selection-start-line="289" selection-start-column="12" selection-end-line="289" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/boost/geometry/algorithms/intersects.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="48" column="10" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/my_map1.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/boost/geometry/algorithms/area.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="252" column="17" selection-start-line="252" selection-start-column="17" selection-end-line="252" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/stats_tracker.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="103" column="6" selection-start-line="103" selection-start-column="6" selection-end-line="103" selection-end-column="6" />
+          <folding>
+            <element signature="e#856#873#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/pyramids.cc">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/triangulator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-246" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/stereo/epipolar_geometry.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1530" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/stereo/inverse_depth_filter.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="277" column="13" selection-start-line="277" selection-start-column="13" selection-end-line="277" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/rasterization.cc">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/visualization.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2805" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/frame.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="41" column="32" lean-forward="true" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
+          <folding>
+            <element signature="e#848#865#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/frame.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="32" column="51" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="51" />
+          <folding>
+            <element signature="e#835#865#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/c++/5/bits/shared_ptr.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="228" column="6" selection-start-line="228" selection-start-column="6" selection-end-line="228" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/types.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="53" column="6" selection-start-line="53" selection-start-column="6" selection-end-line="53" selection-end-column="6" />
+          <folding>
+            <element signature="e#848#865#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/flame/flame.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="318" column="32" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
+        <state relative-caret-position="492">
+          <caret line="559" selection-start-line="559" selection-end-line="559" />
           <folding>
             <element signature="e#848#865#0" expanded="true" />
             <element signature="e#4516#5019#0" />
@@ -684,41 +754,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
+    <entry file="file://$USER_HOME$/.CLion2019.1/system/.remote/wombat1.dltc.spbu.ru_8911/e27e1aaa-c411-4283-a45d-ec400054eca3/usr/include/opencv2/core/types.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-151">
-          <caret line="795" column="17" selection-start-line="795" selection-start-column="17" selection-end-line="795" selection-end-column="17" />
-          <folding>
-            <element signature="e#17853#23261#0" />
-            <element signature="e#23263#25376#0" />
-            <element signature="e#27021#43174#0" />
-            <element signature="e#43176#52241#0" />
-            <element signature="e#52243#60969#0" />
-            <element signature="e#60971#64672#0" />
-            <element signature="e#64674#67265#0" />
-          </folding>
+        <state relative-caret-position="271">
+          <caret line="676" column="24" selection-start-line="676" selection-start-column="24" selection-end-line="676" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="197" lean-forward="true" selection-start-line="197" selection-end-line="197" />
+        <state relative-caret-position="204">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/stereo/epipolar_geometry_test.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="324" column="51" selection-start-line="324" selection-start-column="51" selection-end-line="324" selection-end-column="51" />
+        <state relative-caret-position="23">
+          <caret line="329" column="28" selection-start-line="329" selection-start-column="28" selection-end-line="329" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/flame.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="798" selection-start-line="798" selection-end-line="798" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/flame/utils/keyframe_selector.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="801">
+          <caret line="243" column="27" lean-forward="true" selection-start-line="243" selection-start-column="27" selection-end-line="243" selection-end-column="27" />
           <folding>
-            <element signature="e#5109#5771#0" />
-            <element signature="e#5781#7144#0" />
-            <element signature="e#7231#7258#0" expanded="true" />
-            <element signature="e#8873#9041#0" expanded="true" />
-            <element signature="e#10702#11833#0" />
-            <element signature="e#8681#8778#0" />
+            <element signature="e#847#889#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/camera_c.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
         </state>
       </provider>
     </entry>
